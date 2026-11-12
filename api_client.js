@@ -3,8 +3,8 @@
  * Syncs frontend interfaces (Customer, Staff POS, Admin) with the Python Flask Backend API.
  */
 
-// If served directly from Flask backend on port 5000 or relative path, use current origin; otherwise target port 5000.
-const API_BASE_URL = (window.location.protocol.startsWith('http') && (window.location.port === '5000' || window.location.port === ''))
+// Base API URL: dynamically uses current origin when served over HTTP/HTTPS, or falls back to localhost:5000
+const API_BASE_URL = window.location.protocol.startsWith('http')
   ? `${window.location.origin}/api`
   : 'http://127.0.0.1:5000/api';
 

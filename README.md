@@ -34,3 +34,29 @@ A comprehensive web-based Coffee Shop Management System featuring customer order
    - Barista Portal: `http://localhost:5000/barista.html`
    - Staff POS: `http://localhost:5000/staff.html`
    - Admin Portal: `http://localhost:5000/admin.html`
+
+## Deploy to Render
+
+This repository is pre-configured for instant deployment on [Render](https://render.com).
+
+### Method 1: Using Render Dashboard (Recommended)
+
+1. Sign up / Log in to [Render Dashboard](https://dashboard.render.com).
+2. Click **New +** and select **Web Service**.
+3. Connect your GitHub repository (`Coffee_shop`).
+4. Configure the service settings (or Render will detect them from `render.yaml`):
+   - **Name**: `coffeeshop-system` (or your preferred name)
+   - **Environment**: `Python 3`
+   - **Region**: Choose closest to you (e.g. Singapore, Oregon, Frankfurt)
+   - **Branch**: `main`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn server:app`
+5. Click **Create Web Service**.
+6. Render will build and deploy your app. Once deployed, open your `.onrender.com` URL to access the system!
+
+### Method 2: Render Blueprint
+
+1. In Render Dashboard, click **New +** -> **Blueprint**.
+2. Select your `Coffee_shop` repository.
+3. Render will read `render.yaml` and configure everything automatically. Click **Apply**.
+

@@ -856,11 +856,14 @@ def handle_settings():
     return jsonify(dict(settings) if settings else {})
 
 
+# Initialize DB on startup
+init_db()
+
 if __name__ == '__main__':
-    init_db()
+    port = int(os.environ.get('PORT', 5000))
     print("=" * 60)
     print("THE DAILY GRIND COFFEE SHOP - PYTHON BACKEND SERVER READY")
-    print("REST API & PORTALS LIVE AT: http://127.0.0.1:5000")
+    print(f"REST API & PORTALS LIVE AT: http://0.0.0.0:{port}")
     print("=" * 60)
-    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
+    app.run(host='0.0.0.0', port=port, debug=False)
 
