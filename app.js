@@ -202,24 +202,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return true;
   };
 
-  // Quick Demo Chips
-  const demoChips = document.querySelectorAll('.demo-chip');
-  demoChips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      const email = chip.getAttribute('data-email');
-      const emailInput = document.getElementById('signin-email');
-      const passInput = document.getElementById('signin-password');
-      if (emailInput && passInput) {
-        emailInput.value = email;
-        passInput.value = 'password123';
-        showToast(`Logging in as ${chip.textContent.trim()}...`, 'success');
-        setTimeout(() => {
-          signinForm.requestSubmit();
-        }, 300);
-      }
-    });
-  });
-
   // Sign In submit
   signinForm.addEventListener('submit', async (e) => {
     e.preventDefault();
