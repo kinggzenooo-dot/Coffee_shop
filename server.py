@@ -8,6 +8,7 @@ import json
 import sqlite3
 import time
 import uuid
+import requests
 from flask import Flask, request, jsonify, send_from_directory, abort
 from flask_cors import CORS
 
@@ -28,6 +29,47 @@ if os.path.exists(ENV_PATH):
 
 SUPABASE_URL = os.environ.get('SUPABASE_URL', os.environ.get('VITE_SUPABASE_URL', 'https://hkrvqmzadkkemamklqcw.supabase.co'))
 SUPABASE_KEY = os.environ.get('SUPABASE_KEY', os.environ.get('VITE_SUPABASE_ANON_KEY', ''))
+
+def supabase_headers():
+    return {
+        'apikey': SUPABASE_KEY,
+        'Authorization': f'Bearer {SUPABASE_KEY}',
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
+    }
+
+def supabase_sync_user(user_data):
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        return
+    try:
+        requests.post(f"{SUPABASE_URL}/rest/v1/users", json=user_data, headers=supabase_headers(), timeout=3)
+        if user_data.get('role') in ['barista', 'staff', 'admin']:
+            role = user_data['role']
+            station = 'Espresso Bar' if role == 'barista' else ('Main Office' if role == 'admin' else 'Terminal #01')
+            title = 'Barista' if role == 'barista' else ('Administrator' if role == 'admin' else 'Cashier / POS Staff')
+            requests.post(f"{SUPABASE_URL}/rest/v1/staff_accounts", json={
+                'id': f"st_{uuid.uuid4().hex[:6]}",
+                'name': user_data['name'],
+                'email': user_data['email'],
+                'role': title,
+                'station': station,
+                'status': 'Active'
+            }, headers=supabase_headers(), timeout=3)
+    except Exception as e:
+        print("Supabase user sync error:", e)
+
+def supabase_get_user(email):
+    if not SUPABASE_URL or not SUPABASE_KEY:
+        return None
+    try:
+        r = requests.get(f"{SUPABASE_URL}/rest/v1/users?email=eq.{email.lower()}&limit=1", headers=supabase_headers(), timeout=3)
+        if r.status_code == 200:
+            data = r.json()
+            if data and len(data) > 0:
+                return data[0]
+    except Exception as e:
+        print("Supabase get user error:", e)
+    return None
 
 @app.route('/api/supabase/config', methods=['GET'])
 def get_supabase_config():
@@ -346,18 +388,39 @@ def api_login():
 
     conn = get_db_connection()
     user = conn.execute("SELECT * FROM users WHERE LOWER(email) = ?", (email,)).fetchone()
-    conn.close()
 
+    # 1. Check local SQLite DB
     if user and user['password'] == password:
+        conn.close()
         user_dict = dict(user)
         user_dict.pop('password', None)
         return jsonify({'status': 'success', 'user': user_dict, 'message': 'Sign in successful!'})
-    elif email and password:
-        # Check role-based accounts if registered in staff_accounts
-        conn = get_db_connection()
-        staff = conn.execute("SELECT * FROM staff_accounts WHERE LOWER(email) = ? AND status = 'Active'", (email,)).fetchone()
+    
+    # 2. Check Supabase cloud database
+    sb_user = supabase_get_user(email)
+    if sb_user and sb_user.get('password') == password:
+        try:
+            conn.execute('''
+                INSERT OR REPLACE INTO users (id, name, email, password, role, tier, points, total_spend, total_orders)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''', (
+                sb_user['id'], sb_user['name'], sb_user['email'].lower(), sb_user['password'],
+                sb_user.get('role', 'customer'), sb_user.get('tier', 'Standard Member'),
+                sb_user.get('points', 50), sb_user.get('total_spend', 0.0), sb_user.get('total_orders', 0)
+            ))
+            conn.commit()
+        except Exception:
+            pass
         conn.close()
+        user_dict = dict(sb_user)
+        user_dict.pop('password', None)
+        return jsonify({'status': 'success', 'user': user_dict, 'message': 'Sign in successful!'})
+
+    if email and password:
+        # Check role-based accounts if registered in staff_accounts
+        staff = conn.execute("SELECT * FROM staff_accounts WHERE LOWER(email) = ? AND status = 'Active'", (email,)).fetchone()
         if staff:
+            conn.close()
             role_str = staff['role'].lower()
             if 'admin' in role_str:
                 role = 'admin'
@@ -376,6 +439,7 @@ def api_login():
                 'message': 'Staff sign in successful!'
             })
     
+    conn.close()
     return jsonify({'status': 'error', 'message': 'Invalid email address or password.'}), 401
 
 
@@ -393,6 +457,8 @@ def api_signup():
 
     conn = get_db_connection()
     existing = conn.execute("SELECT * FROM users WHERE LOWER(email) = ?", (email,)).fetchone()
+    if not existing:
+        existing = supabase_get_user(email)
     if existing:
         conn.close()
         return jsonify({'status': 'error', 'message': 'An account with this email already exists.'}), 400
@@ -413,7 +479,7 @@ def api_signup():
     initial_tier = 'Staff Member' if role in ['staff', 'barista'] else ('Platinum Member' if role == 'admin' else 'Standard Member')
 
     conn.execute('''
-        INSERT INTO users (id, name, email, password, role, tier, points, total_spend, total_orders)
+        INSERT OR REPLACE INTO users (id, name, email, password, role, tier, points, total_spend, total_orders)
         VALUES (?, ?, ?, ?, ?, ?, ?, 0.0, 0)
     ''', (new_id, name, email, password, role, initial_tier, initial_points))
 
@@ -427,10 +493,26 @@ def api_signup():
         ''', (f"st_{uuid.uuid4().hex[:6]}", name, email, title, station))
 
     conn.commit()
+
+    # Sync to Supabase cloud database
+    supabase_sync_user({
+        'id': new_id,
+        'name': name,
+        'email': email,
+        'password': password,
+        'role': role,
+        'tier': initial_tier,
+        'points': initial_points,
+        'total_spend': 0.0,
+        'total_orders': 0
+    })
+
     user = conn.execute("SELECT * FROM users WHERE id = ?", (new_id,)).fetchone()
     conn.close()
 
-    user_dict = dict(user)
+    user_dict = dict(user) if user else {
+        'id': new_id, 'name': name, 'email': email, 'role': role, 'tier': initial_tier, 'points': initial_points
+    }
     user_dict.pop('password', None)
     return jsonify({'status': 'success', 'user': user_dict, 'message': 'Account created successfully!'})
 
@@ -712,6 +794,23 @@ def update_order_status(order_id):
 # 5. CUSTOMERS ENDPOINTS
 @app.route('/api/customers', methods=['GET'])
 def get_customers():
+    # Try Supabase first
+    if SUPABASE_URL and SUPABASE_KEY:
+        try:
+            r = requests.get(f"{SUPABASE_URL}/rest/v1/users?role=eq.customer&order=total_spend.desc", headers=supabase_headers(), timeout=3)
+            if r.status_code == 200:
+                custs = r.json()
+                result = []
+                for c in custs:
+                    cd = dict(c)
+                    cd['totalSpend'] = cd.get('total_spend', 0.0)
+                    cd['totalOrders'] = cd.get('total_orders', 0)
+                    cd.pop('password', None)
+                    result.append(cd)
+                return jsonify(result)
+        except Exception:
+            pass
+
     conn = get_db_connection()
     rows = conn.execute("SELECT * FROM users WHERE role = 'customer' ORDER BY total_spend DESC").fetchall()
     conn.close()
