@@ -32,13 +32,24 @@ A comprehensive web-based Coffee Shop Management System featuring customer order
 3. Open your browser to the **Single Unified Entry URL**:
    - **`http://localhost:5000/`** (or `index.html`)
 
-### Demo Accounts (Password: `password123` for all)
+### Default Accounts (Password: `password123` for all)
 - **☕ Customer**: `john.doe@example.com` &rarr; Routes to Customer Store
 - **🧑‍🍳 Barista**: `barista@dailygrind.com` &rarr; Routes to Barista KDS
 - **💳 Staff / Cashier**: `sarah.j@dailygrind.com` &rarr; Routes to POS Terminal
 - **👑 Administrator**: `admin@dailygrind.com` &rarr; Routes to Admin Dashboard
 
-*Note: You can also click the 1-click quick login chips on the sign-in page, or use the bottom navigation hub to jump straight into any portal.*
+*Note: You can also choose your desired role when creating a new account on the Sign Up page.*
+
+## Supabase Realtime Database Integration
+
+The system is connected to Supabase for sub-second, cross-client realtime synchronization:
+
+1. **Realtime Broadcast**: Customer order placements, barista status changes, and menu edits broadcast across devices instantly via the Supabase Realtime engine.
+2. **Setup Supabase Tables (1-Click SQL Script)**:
+   - Go to your [Supabase SQL Editor](https://supabase.com/dashboard/project/hkrvqmzadkkemamklqcw/sql).
+   - Copy the contents of [`supabase_schema.sql`](supabase_schema.sql).
+   - Paste into the SQL editor and click **Run**.
+   - All tables (`orders`, `products`, `users`, `categories`, `staff_accounts`, `notifications`, `settings`) and initial records will be created with Row Level Security (RLS) policies and Realtime publications enabled.
 
 ## Deploy to Render
 

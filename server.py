@@ -14,6 +14,28 @@ from flask_cors import CORS
 app = Flask(__name__, static_folder='.', static_url_path='')
 CORS(app)
 
+# Load .env file if present
+ENV_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env')
+if not os.path.exists(ENV_PATH):
+    ENV_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
+if os.path.exists(ENV_PATH):
+    with open(ENV_PATH, 'r', encoding='utf-8') as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                k, v = line.split('=', 1)
+                os.environ.setdefault(k.strip(), v.strip())
+
+SUPABASE_URL = os.environ.get('SUPABASE_URL', os.environ.get('VITE_SUPABASE_URL', 'https://hkrvqmzadkkemamklqcw.supabase.co'))
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY', os.environ.get('VITE_SUPABASE_ANON_KEY', ''))
+
+@app.route('/api/supabase/config', methods=['GET'])
+def get_supabase_config():
+    return jsonify({
+        'url': SUPABASE_URL,
+        'anonKey': SUPABASE_KEY
+    })
+
 DB_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'coffeeshop.db')
 
 def get_db_connection():

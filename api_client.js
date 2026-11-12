@@ -8,6 +8,79 @@ const API_BASE_URL = window.location.protocol.startsWith('http')
   ? `${window.location.origin}/api`
   : 'http://127.0.0.1:5000/api';
 
+// Supabase Configuration from .env
+const SUPABASE_CONFIG = {
+  url: 'https://hkrvqmzadkkemamklqcw.supabase.co',
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhrcnZxbXphZGtrZW1hbWtscWN3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ0ODg5MjMsImV4cCI6MjExMDA2NDkyM30.8z6WAegs9fo-UtVQYNveLlpFCmokEdD724Hljy6dztc'
+};
+
+let _supabaseClient = null;
+let _realtimeChannel = null;
+
+function getSupabase() {
+  if (!_supabaseClient && window.supabase && window.supabase.createClient) {
+    try {
+      _supabaseClient = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+      _realtimeChannel = _supabaseClient.channel('coffeeshop-realtime-channel', {
+        config: { broadcast: { self: false } }
+      });
+      _realtimeChannel.subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          console.log('⚡ Connected to Supabase Realtime channel (coffeeshop-realtime-channel)');
+        }
+      });
+    } catch (e) {
+      console.warn('Supabase initialization error:', e);
+    }
+  }
+  return _supabaseClient;
+}
+
+// Ensure Supabase client is initialized on script load
+if (typeof window !== 'undefined') {
+  if (window.supabase) {
+    getSupabase();
+  } else {
+    window.addEventListener('load', () => getSupabase());
+  }
+}
+
+// Global Realtime Event System using Supabase Broadcast
+window.CoffeeRealtime = {
+  broadcast(event, payload) {
+    getSupabase();
+    if (_realtimeChannel) {
+      try {
+        _realtimeChannel.send({
+          type: 'broadcast',
+          event: event,
+          payload: payload
+        });
+      } catch (e) {
+        console.warn('Realtime broadcast error:', e);
+      }
+    }
+  },
+  on(event, callback) {
+    getSupabase();
+    if (_realtimeChannel) {
+      _realtimeChannel.on('broadcast', { event: event }, (msg) => {
+        callback(msg.payload);
+      });
+    } else {
+      // Retry when Supabase finishes connecting
+      setTimeout(() => {
+        getSupabase();
+        if (_realtimeChannel) {
+          _realtimeChannel.on('broadcast', { event: event }, (msg) => {
+            callback(msg.payload);
+          });
+        }
+      }, 500);
+    }
+  }
+};
+
 const API = {
   // Auth
   async login(email, password) {
@@ -56,7 +129,9 @@ const API = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(productData)
       });
-      return await res.json();
+      const data = await res.json();
+      window.CoffeeRealtime.broadcast('product_updated', productData);
+      return data;
     } catch (e) {
       return null;
     }
@@ -69,7 +144,9 @@ const API = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(productData)
       });
-      return await res.json();
+      const data = await res.json();
+      window.CoffeeRealtime.broadcast('product_updated', { id: productId, ...productData });
+      return data;
     } catch (e) {
       return null;
     }
@@ -80,7 +157,9 @@ const API = {
       const res = await fetch(`${API_BASE_URL}/products/${encodeURIComponent(productId)}/toggle`, {
         method: 'PUT'
       });
-      return await res.json();
+      const data = await res.json();
+      window.CoffeeRealtime.broadcast('product_updated', { id: productId });
+      return data;
     } catch (e) {
       return null;
     }
@@ -91,7 +170,9 @@ const API = {
       const res = await fetch(`${API_BASE_URL}/products/${encodeURIComponent(productId)}`, {
         method: 'DELETE'
       });
-      return await res.json();
+      const data = await res.json();
+      window.CoffeeRealtime.broadcast('product_updated', { id: productId, deleted: true });
+      return data;
     } catch (e) {
       return null;
     }
@@ -150,7 +231,11 @@ const API = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData)
       });
-      return await res.json();
+      const data = await res.json();
+      if (data && data.status === 'success') {
+        window.CoffeeRealtime.broadcast('order_created', data.order || orderData);
+      }
+      return data;
     } catch (e) {
       return null;
     }
@@ -163,7 +248,11 @@ const API = {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
       });
-      return await res.json();
+      const data = await res.json();
+      if (data && data.status === 'success') {
+        window.CoffeeRealtime.broadcast('order_status_updated', { id: orderId, status });
+      }
+      return data;
     } catch (e) {
       return null;
     }

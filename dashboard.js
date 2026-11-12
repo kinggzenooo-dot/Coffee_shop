@@ -884,7 +884,29 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderOrdersUI();
   renderPastOrdersTable();
 
-  // Poll data every 4s so dashboard products, images, categories, and orders update in real time
+  // Supabase Realtime instantaneous listeners
+  if (window.CoffeeRealtime) {
+    window.CoffeeRealtime.on('order_status_updated', async (data) => {
+      console.log('⚡ [Supabase Realtime] Order status changed:', data);
+      await loadAllCustomerData();
+      renderOrdersUI();
+      renderPastOrdersTable();
+      showToast(`Your order status is now: ${data.status}!`, 'info');
+    });
+
+    window.CoffeeRealtime.on('product_updated', async () => {
+      console.log('⚡ [Supabase Realtime] Products/menu updated');
+      await loadAllCustomerData();
+      renderCategoryFilterCapsules();
+      const activeSection = document.querySelector('.content-section.active');
+      if (activeSection) {
+        if (activeSection.id === 'sect-home') renderHomeProducts();
+        else if (activeSection.id === 'sect-menu') renderMenuGrid();
+      }
+    });
+  }
+
+  // Poll data backup every 4s
   setInterval(async () => {
     await loadAllCustomerData();
     renderCategoryFilterCapsules();

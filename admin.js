@@ -1751,7 +1751,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Initial load
   await loadAllData();
 
-  // Background polling every 4 seconds to sync orders & alerts cleanly without disruptive redraws
+  // Supabase Realtime instantaneous listeners
+  if (window.CoffeeRealtime) {
+    window.CoffeeRealtime.on('order_created', async () => {
+      try {
+        const ords = await window.API.getOrders();
+        if (Array.isArray(ords)) orders = ords;
+        renderActiveView();
+      } catch (e) {}
+    });
+
+    window.CoffeeRealtime.on('order_status_updated', async () => {
+      try {
+        const ords = await window.API.getOrders();
+        if (Array.isArray(ords)) orders = ords;
+        renderActiveView();
+      } catch (e) {}
+    });
+
+    window.CoffeeRealtime.on('product_updated', async () => {
+      try {
+        const prods = await window.API.getProducts();
+        if (Array.isArray(prods)) products = prods;
+        renderActiveView();
+      } catch (e) {}
+    });
+  }
+
+  // Background polling every 4 seconds
   setInterval(async () => {
     try {
       const [ordsData, notifsData, prodsData] = await Promise.all([

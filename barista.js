@@ -468,7 +468,27 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadKDSData();
   renderKDSTickets();
 
-  // Background polling every 4s for live instant ticket fulfillment
+  // Supabase Realtime instantaneous event listeners
+  if (window.CoffeeRealtime) {
+    window.CoffeeRealtime.on('order_created', async (newOrder) => {
+      console.log('⚡ [Supabase Realtime] New incoming order:', newOrder);
+      await loadKDSData();
+      renderKDSTickets();
+      showToast(`🔔 New ticket: ${newOrder && newOrder.id ? newOrder.id : 'Order'} received!`, 'info');
+    });
+
+    window.CoffeeRealtime.on('order_status_updated', async (data) => {
+      console.log('⚡ [Supabase Realtime] Order status updated:', data);
+      await loadKDSData();
+      renderKDSTickets();
+    });
+
+    window.CoffeeRealtime.on('product_updated', async () => {
+      await loadKDSData();
+    });
+  }
+
+  // Background polling backup every 4s
   setInterval(async () => {
     await loadKDSData();
     renderKDSTickets();

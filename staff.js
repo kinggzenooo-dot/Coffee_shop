@@ -1265,6 +1265,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderStaffCustomersUI();
   renderStaffCatalogUI();
 
+  // Supabase Realtime instantaneous listeners
+  if (window.CoffeeRealtime) {
+    window.CoffeeRealtime.on('order_created', async () => {
+      await loadAllData();
+      renderStaffOrdersUI();
+      showToast('🔔 New order received on POS!', 'info');
+    });
+
+    window.CoffeeRealtime.on('order_status_updated', async () => {
+      await loadAllData();
+      renderStaffOrdersUI();
+    });
+
+    window.CoffeeRealtime.on('product_updated', async () => {
+      await loadAllData();
+      renderCategoryCapsules();
+      const activeSection = document.querySelector('.content-section.active');
+      if (activeSection && activeSection.id === 'sect-pos') renderPOSProducts();
+      else if (activeSection && activeSection.id === 'sect-products') renderStaffCatalogUI();
+    });
+  }
+
   // Polling every 4s for live incoming online customer orders, product/category changes
   setInterval(async () => {
     await loadAllData();
