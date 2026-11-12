@@ -1,0 +1,1128 @@
+/* ==========================================================================
+   THE DAILY GRIND - STORE ADMIN PORTAL STYLES
+   MATCHING OBSIDIAN DARK & RICH GOLDEN BRONZE LUXURY BRAND THEME
+   ========================================================================== */
+
+/* ==========================================================================
+   CRITICAL FIX: MODAL VISIBILITY
+   dashboard.css sets .modal { display: none } but never sets .modal.active
+   This rule makes ALL 7 admin modals actually open when .active is added.
+   ========================================================================== */
+.modal.active {
+  display: flex !important;
+}
+
+/* ==========================================================================
+   CRITICAL FIX: BUTTON TEXT VISIBILITY
+   style.css defines .btn-outline with color: white (for dark auth page).
+   Inside the admin's light/white background, text was invisible.
+   Override to use dark brown text + visible border for all admin buttons.
+   ========================================================================== */
+.admin-container .btn-outline,
+.modal .btn-outline {
+  background-color: transparent;
+  border-color: var(--color-accent-brown);
+  color: var(--color-accent-dark);
+  font-weight: 600;
+  width: auto;
+}
+
+.admin-container .btn-outline:hover,
+.modal .btn-outline:hover {
+  background-color: rgba(139, 90, 43, 0.08);
+  color: var(--color-accent-dark);
+  border-color: var(--color-accent-dark);
+  transform: translateY(-1px);
+}
+
+/* Header switcher buttons (Staff POS / Customer View) keep outline style */
+.btn-mode-switch.btn-outline {
+  border-color: var(--color-accent-brown);
+  color: var(--color-accent-dark);
+  width: auto;
+}
+
+/* ==========================================================================
+   CRITICAL FIX: SMALL TABLE ACTION BUTTONS (.btn-sm)
+   Used everywhere in admin.js table renders but was NEVER defined in CSS.
+   Without this, buttons get full 14px 28px padding and 15px margin-top.
+   ========================================================================== */
+.btn-sm {
+  padding: 5px 12px !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  margin-top: 0 !important;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-family: var(--font-sans);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  line-height: 1.4;
+}
+
+.btn-sm.btn-outline {
+  background-color: transparent;
+  border-color: rgba(139, 90, 43, 0.35) !important;
+  color: var(--color-accent-dark) !important;
+  padding: 5px 12px !important;
+}
+
+.btn-sm.btn-outline:hover {
+  background-color: rgba(139, 90, 43, 0.06);
+  border-color: var(--color-accent-brown) !important;
+}
+
+/* ==========================================================================
+   MODAL SIZING CLASSES
+   Used in admin.html as class="modal-content modal-md/modal-lg" but missing.
+   ========================================================================== */
+.modal-content.modal-md {
+  max-width: 560px;
+}
+
+.modal-content.modal-lg {
+  max-width: 820px;
+}
+
+/* ==========================================================================
+   MODAL INTERIOR LAYOUT CLASSES
+   Generated in admin.js renderHTML / openAdminOrderModal etc.
+   ========================================================================== */
+.modal-header-simple {
+  padding: 28px 32px 16px;
+  border-bottom: 1px solid rgba(139, 90, 43, 0.10);
+}
+
+.modal-header-simple h3 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  color: var(--color-accent-dark);
+  margin: 0 0 4px;
+}
+
+.modal-header-simple p {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+.modal-body-padded {
+  padding: 24px 32px 28px;
+}
+
+.modal-footer-flex {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(139, 90, 43, 0.10);
+}
+
+/* ==========================================================================
+   STATUS BADGES
+   Used in order rows and order details modal — status.toLowerCase() as class.
+   ========================================================================== */
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.73rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.status-badge.pending   { background-color: #e8f0fe; color: #1a73e8; }
+.status-badge.preparing { background-color: #fef7e0; color: #b06000; }
+.status-badge.ready     { background-color: #e6f4ea; color: #137333; }
+.status-badge.completed { background-color: #e6f4ea; color: #137333; }
+.status-badge.cancelled { background-color: #fce8e6; color: #c5221f; }
+
+/* ==========================================================================
+   TABLE ACTION CELL
+   Wraps multiple small buttons in an order/product/staff row.
+   ========================================================================== */
+.table-actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================================
+   CHANNEL TAGS (POS vs Online in orders table)
+   ========================================================================== */
+.channel-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.channel-tag.pos {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.channel-tag.online {
+  background-color: #f3e5f5;
+  color: #6a1b9a;
+}
+
+/* ==========================================================================
+   STOCK TAGS (In Stock / Out of Stock / Active / Deactivated)
+   ========================================================================== */
+.stock-tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.stock-tag.in-stock  { background-color: #e6f4ea; color: #137333; }
+.stock-tag.out-stock { background-color: #fce8e6; color: #c5221f; }
+
+/* ==========================================================================
+   STATUS SELECT DROPDOWN IN ORDERS TABLE
+   ========================================================================== */
+.status-select-sm {
+  padding: 5px 8px;
+  font-size: 0.78rem;
+  font-family: var(--font-sans);
+  border: 1px solid rgba(139, 90, 43, 0.25);
+  border-radius: 6px;
+  background-color: var(--color-light-surface);
+  color: var(--color-accent-dark);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.status-select-sm:focus {
+  border-color: var(--color-accent-brown);
+}
+
+/* ==========================================================================
+   POS SELECT (used in modal dropdowns: category, currency, order status etc.)
+   ========================================================================== */
+.pos-select {
+  padding: 12px 14px;
+  font-size: 0.92rem;
+  font-family: var(--font-sans);
+  border: 1.5px solid rgba(139, 90, 43, 0.2);
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-light-surface);
+  color: var(--color-accent-dark);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+}
+
+.pos-select:hover { border-color: rgba(139, 90, 43, 0.4); }
+.pos-select:focus { border-color: var(--color-accent-brown); box-shadow: var(--shadow-focus); }
+
+/* ==========================================================================
+   PAY OPTION (checkbox label rows in add product modal)
+   ========================================================================== */
+.pay-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #f7f3ee;
+  border: 1.5px solid rgba(139, 90, 43, 0.15);
+  border-radius: var(--border-radius-sm);
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--color-accent-dark);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  margin-bottom: 12px;
+}
+
+.pay-option:hover {
+  border-color: var(--color-accent-brown);
+  background-color: rgba(139, 90, 43, 0.04);
+}
+
+/* ==========================================================================
+   BILLING ROWS (order details modal invoice breakdown)
+   ========================================================================== */
+.billing-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  padding: 6px 0;
+}
+
+.billing-row.discount-row { color: var(--color-success); }
+
+.billing-row.total-row {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-accent-dark);
+}
+
+.billing-divider {
+  height: 1px;
+  background-color: rgba(139, 90, 43, 0.12);
+  margin: 8px 0;
+}
+
+/* ==========================================================================
+   ITEM OPTIONS TEXT (milk/sweetness flags in products table)
+   ========================================================================== */
+.item-options-text {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* ==========================================================================
+   CUSTOMER CARD (admin customers grid)
+   ========================================================================== */
+.customer-card {
+  background-color: var(--color-light-surface);
+  border: 1px solid rgba(139, 90, 43, 0.12);
+  border-radius: var(--border-radius-md);
+  padding: 20px;
+  transition: all var(--transition-normal);
+}
+
+.customer-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-accent-brown);
+  box-shadow: 0 8px 20px rgba(139, 90, 43, 0.08);
+}
+
+.cust-card-top {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.cust-avatar-large {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--color-accent-dark);
+  color: var(--color-text-light);
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cust-card-details {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cust-card-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-accent-dark);
+  margin: 0;
+}
+
+.cust-card-contact {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  display: block;
+}
+
+.cust-card-stats {
+  display: flex;
+  gap: 12px;
+  justify-content: space-around;
+  background-color: #f7f3ee;
+  border-radius: var(--border-radius-sm);
+  padding: 12px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.stat-lbl {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.stat-val {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-accent-dark);
+}
+
+/* ==========================================================================
+   STAFF CUSTOMERS GRID (used in both Customers section and Staff Users)
+   ========================================================================== */
+.staff-customers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* ==========================================================================
+   TIER BADGES (Standard, Silver, Gold, Platinum)
+   ========================================================================== */
+.tier-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tier-badge.standard  { background-color: #f5f5f5; color: #555; }
+.tier-badge.silver    { background-color: #e8ecf0; color: #546e7a; }
+.tier-badge.gold      { background-color: #fef3cd; color: #8b5a2b; border: 1px solid rgba(139, 90, 43, 0.2); }
+.tier-badge.platinum  { background-color: #ede7f6; color: #4527a0; }
+
+/* ==========================================================================
+   ORDERS CONTROL BAR / CUSTOMERS CONTROL BAR
+   ========================================================================== */
+.staff-orders-control-bar,
+.staff-customers-control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.order-status-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.status-tab {
+  padding: 7px 14px;
+  font-size: 0.80rem;
+  font-weight: 600;
+  border-radius: 20px;
+  border: 1.5px solid rgba(139, 90, 43, 0.2);
+  background-color: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.status-tab:hover {
+  border-color: var(--color-accent-brown);
+  color: var(--color-accent-dark);
+}
+
+.status-tab.active {
+  background-color: var(--color-accent-dark);
+  border-color: var(--color-accent-dark);
+  color: #fff;
+}
+
+/* ==========================================================================
+   ORDERS METRICS ROW (dashboard, inventory, sales metric cards)
+   ========================================================================== */
+.orders-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.metric-card {
+  background-color: var(--color-light-surface);
+  border: 1px solid rgba(139, 90, 43, 0.10);
+  border-radius: var(--border-radius-md);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.metric-card.highlight-metric {
+  background: linear-gradient(135deg, #2b1d15 0%, #3d2314 100%);
+  border-color: rgba(223, 193, 165, 0.15);
+}
+
+.metric-card.highlight-metric .metric-title,
+.metric-card.highlight-metric .metric-sub {
+  color: rgba(223, 193, 165, 0.75);
+}
+
+.metric-card.highlight-metric .metric-val {
+  color: #fff;
+}
+
+.metric-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.metric-val {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-accent-dark);
+  line-height: 1.1;
+}
+
+.metric-sub {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   SECTION TITLE ROW
+   ========================================================================== */
+.section-title-row {
+  margin-bottom: 20px;
+}
+
+/* ==========================================================================
+   HEADER SUBTEXT
+   ========================================================================== */
+.header-subtext {
+  font-size: 0.80rem;
+  color: var(--color-text-muted);
+  display: block;
+}
+
+
+.admin-portal-tag {
+  background-color: rgba(200, 64, 33, 0.18);
+  color: #ff6b4a;
+  border: 1px solid rgba(200, 64, 33, 0.3);
+}
+
+.admin-avatar {
+  background: linear-gradient(135deg, #8b5a2b 0%, #3d2314 100%);
+  color: #ffffff;
+  border: 1px solid var(--color-accent-light);
+}
+
+.btn-mode-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 0.82rem;
+}
+
+.admin-content-body {
+  padding: 36px 48px;
+}
+
+.mb-0 { margin-bottom: 0 !important; }
+.mb-16 { margin-bottom: 16px !important; }
+.mb-20 { margin-bottom: 20px !important; }
+.mb-24 { margin-bottom: 24px !important; }
+.mb-28 { margin-bottom: 28px !important; }
+.mt-16 { margin-top: 16px !important; }
+
+.admin-group-title {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  color: var(--color-accent-dark);
+  font-weight: 700;
+}
+
+/* CARDS & METRIC HIGHLIGHTS */
+.admin-card {
+  background-color: var(--color-light-surface);
+  border: 1px solid rgba(139, 90, 43, 0.12);
+  border-radius: var(--border-radius-md);
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+}
+
+.admin-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.admin-card-header h4 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--color-accent-dark);
+  margin: 0;
+}
+
+.dash-grid-row {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 28px;
+}
+
+.dash-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.dash-perf-stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.perf-stat-pill {
+  background-color: #f7f3ee;
+  border: 1px solid rgba(139, 90, 43, 0.12);
+  border-radius: var(--border-radius-sm);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.pill-lbl {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-accent-brown);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.pill-val {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--color-accent-dark);
+  margin-top: 2px;
+}
+
+.admin-mini-table {
+  width: 100%;
+}
+
+.admin-mini-table th, .admin-mini-table td {
+  padding: 10px 14px;
+  font-size: 0.82rem;
+}
+
+.mini-metrics {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 0;
+}
+
+.warning-metric {
+  background-color: #fff8e1;
+  border-color: rgba(245, 127, 23, 0.3);
+}
+
+.warning-metric .metric-title {
+  color: #b78103;
+}
+
+.warning-metric .metric-val {
+  color: #f57f17;
+}
+
+.danger-metric {
+  background-color: #ffebee;
+  border-color: rgba(198, 40, 40, 0.3);
+}
+
+.danger-metric .metric-title {
+  color: #c62828;
+}
+
+.danger-metric .metric-val {
+  color: #c62828;
+}
+
+/* TOP CUSTOMER SPOTLIGHT */
+.top-customer-spotlight {
+  background: linear-gradient(135deg, #181514 0%, #2b221d 100%);
+  color: var(--color-text-light);
+  border-radius: var(--border-radius-sm);
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+}
+
+.spotlight-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.spotlight-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--color-accent-light);
+  color: var(--color-accent-dark);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* RECENT ACTIVITY FEED */
+.activity-feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(139, 90, 43, 0.12);
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.act-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #f7f3ee;
+  color: var(--color-accent-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.act-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.act-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.act-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-accent-dark);
+}
+
+.act-time {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+/* CATEGORIES GRID */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.category-card {
+  background-color: var(--color-light-surface);
+  border: 1px solid rgba(139, 90, 43, 0.12);
+  border-radius: var(--border-radius-md);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all var(--transition-normal);
+}
+
+.category-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-accent-brown);
+  box-shadow: 0 8px 20px rgba(139, 90, 43, 0.08);
+}
+
+.cat-card-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cat-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--border-radius-sm);
+  background-color: #1e1b18;
+  color: var(--color-accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cat-icon-box svg {
+  width: 22px;
+  height: 22px;
+  stroke: var(--color-accent-light);
+}
+
+.cat-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-accent-dark);
+}
+
+.cat-card-count {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+/* VISUAL CHARTS BARS */
+.chart-bars-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.chart-bar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bar-label-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--color-accent-dark);
+}
+
+.bar-track {
+  height: 10px;
+  background-color: #f7f3ee;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent-brown) 0%, var(--color-accent-light) 100%);
+  border-radius: 5px;
+  transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* REPORTS FORM */
+.reports-form-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 20px;
+}
+
+.reports-form-row .field-group {
+  flex: 1;
+}
+
+/* NOTIFICATIONS LIST */
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.notif-card {
+  background-color: var(--color-light-surface);
+  border: 1px solid rgba(139, 90, 43, 0.12);
+  border-radius: var(--border-radius-md);
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all var(--transition-normal);
+}
+
+.notif-card.unread {
+  border-left: 4px solid var(--color-accent-brown);
+  background-color: #fdfaf6;
+}
+
+.notif-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.notif-icon-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f7f3ee;
+  color: var(--color-accent-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notif-icon-box.low-stock {
+  background-color: #fff8e1;
+  color: #f57f17;
+}
+
+.notif-icon-box.order {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.notif-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.notif-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-accent-dark);
+}
+
+.notif-desc {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+.notif-time {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   RESPONSIVE & MOBILE ADAPTATIONS
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .dash-grid-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .admin-content-body {
+    padding: 24px 20px;
+  }
+
+  .mini-metrics {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-content-body {
+    padding: 16px 12px;
+  }
+
+  .reports-form-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .reports-form-row button {
+    width: 100%;
+  }
+
+  .dash-perf-stats-row {
+    grid-template-columns: 1fr;
+  }
+
+  .mini-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .top-customer-spotlight {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .admin-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .orders-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* ==========================================================================
+   PRINT MEDIA STYLING
+   ========================================================================== */
+@media print {
+  .sidebar,
+  .content-header,
+  .staff-orders-control-bar,
+  .staff-customers-control-bar,
+  .btn,
+  #toast-container,
+  .modal {
+    display: none !important;
+  }
+
+  body, .admin-container, .main-content {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    box-shadow: none !important;
+  }
+
+  .admin-card {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    padding: 10px !important;
+  }
+
+  .orders-table th, .orders-table td {
+    color: #000000 !important;
+    border-color: #ddd !important;
+  }
+}
+
+/* ==========================================================================
+   PRODUCT IMAGE UPLOAD & THUMBNAIL STYLING
+   ========================================================================== */
+.prod-img-upload-box {
+  background: #fdfaf6;
+  border: 1.5px dashed rgba(139, 90, 43, 0.25);
+  border-radius: var(--border-radius-sm);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.prod-img-preview-container {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #110f0e;
+  border: 1px solid rgba(139, 90, 43, 0.2);
+}
+
+.prod-img-preview-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.btn-remove-img {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.9);
+  color: #fff;
+  border: none;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-remove-img:hover {
+  background: #dc2626;
+  transform: scale(1.1);
+}
+
+.prod-img-inputs-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.file-upload-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.file-input-hidden {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  width: 0.1px;
+  height: 0.1px;
+}
+
+.file-upload-btn {
+  cursor: pointer;
+  margin: 0 !important;
+}
+
+.upload-or-divider {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.img-url-input {
+  flex: 1;
+  min-width: 180px;
+  padding: 8px 12px !important;
+  font-size: 0.84rem !important;
+}
+
+.admin-prod-thumb {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid rgba(139, 90, 43, 0.15);
+  background-color: #f7f3ee;
+}
+

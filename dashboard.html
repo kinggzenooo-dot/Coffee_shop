@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Manage your orders, browse the menu, and check loyalty points on the Daily Grind Member Dashboard.">
+  <title>Dashboard | The Daily Grind</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <!-- Toast Notification System -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <div class="dashboard-container">
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar" aria-label="Main Navigation">
+      <div class="sidebar-header">
+        <svg class="logo-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M17 8h1a4 4 0 1 1 0 8h-1"/>
+          <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/>
+          <line x1="6" y1="2" x2="6" y2="4"/>
+          <line x1="10" y1="2" x2="10" y2="4"/>
+          <line x1="14" y1="2" x2="14" y2="4"/>
+        </svg>
+        <h1 class="logo-text">The Daily Grind</h1>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <!-- MAIN GROUP -->
+          <li class="nav-group-header">MAIN</li>
+          <li>
+            <button class="nav-item active" data-target="home" aria-current="page">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+              </svg>
+              <span>Home</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-target="menu">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+              <span>Menu</span>
+            </button>
+          </li>
+
+          <!-- ORDER GROUP -->
+          <li class="nav-group-header">ORDER</li>
+          <li>
+            <button class="nav-item" data-target="cart">
+              <div class="icon-badge-wrapper">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1"/>
+                  <circle cx="20" cy="21" r="1"/>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                <span class="cart-badge" id="cart-count" style="display: none;">0</span>
+              </div>
+              <span>Cart</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-target="orders">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+              </svg>
+              <span>My Orders</span>
+            </button>
+          </li>
+
+          <!-- ACCOUNT GROUP -->
+          <li class="nav-group-header">ACCOUNT</li>
+          <li>
+            <button class="nav-item" data-target="profile">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <span>Profile</span>
+            </button>
+          </li>
+
+          <!-- SYSTEM GROUP -->
+          <li class="nav-group-header">SYSTEM</li>
+          <li>
+            <button class="nav-item nav-logout" id="btn-logout-sidebar">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+              </svg>
+              <span>Logout</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-shortcut">
+          <div class="avatar">JD</div>
+          <div class="user-details">
+            <span class="user-name">John Doe</span>
+            <span class="user-role">Gold Member</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT VIEWPORTS -->
+    <main class="main-content">
+      <!-- Top header bar -->
+      <header class="content-header">
+        <div class="header-left">
+          <h2 id="section-title">Home</h2>
+        </div>
+        <div class="header-right" style="display: flex; align-items: center; gap: 12px;">
+          <a href="staff.html" class="btn btn-outline" style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; padding: 8px 16px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px;">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+            </svg>
+            <span>Staff POS</span>
+          </a>
+          <a href="admin.html" class="btn btn-outline" style="display: flex; align-items: center; gap: 8px; font-size: 0.85rem; padding: 8px 16px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px;">
+              <rect x="3" y="3" width="7" height="9" rx="1"/>
+              <rect x="14" y="3" width="7" height="5" rx="1"/>
+            </svg>
+            <span>Admin Portal</span>
+          </a>
+          <div class="points-indicator">
+            <span class="points-label">Loyalty Points</span>
+            <span class="points-val" id="user-points-val">420 pts</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="content-body">
+        
+        <!-- HOME SECTION -->
+        <section id="sect-home" class="content-section active">
+          <!-- Coffee Shop Overview (Elegant Hero Banner) -->
+          <div class="welcome-banner">
+            <div class="banner-text">
+              <span class="banner-tagline">ESTABLISHED 2026</span>
+              <h3>Welcome to The Daily Grind</h3>
+              <p>Crafting artisanal micro-roasts and fresh culinary delicacies for the true coffee connoisseur. We source single-origin beans ethically from sustainable farms across the globe, bringing premium notes straight to your cup.</p>
+              <button class="btn btn-primary btn-gold-outline" id="btn-quick-order">Browse Menu</button>
+            </div>
+            <div class="banner-pattern-overlay">
+              <svg class="pattern-svg" viewBox="0 0 100 100" fill="none">
+                <circle cx="50" cy="50" r="40" stroke="rgba(223, 193, 165, 0.15)" stroke-width="2" stroke-dasharray="4 4"/>
+                <circle cx="50" cy="50" r="30" stroke="rgba(223, 193, 165, 0.25)" stroke-width="1.5"/>
+                <path d="M50 20v60M20 50h60" stroke="rgba(223, 193, 165, 0.1)" stroke-width="1"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Featured Products -->
+          <div class="home-section-container">
+            <div class="section-title-row">
+              <div class="section-title-left">
+                <span class="pre-heading">HANDPICKED SPECIALTIES</span>
+                <h4 class="home-group-title">Featured Products</h4>
+              </div>
+            </div>
+            <div class="featured-grid" id="home-featured-grid">
+              <!-- Rendered Dynamically by JS -->
+            </div>
+          </div>
+
+          <!-- Popular Products & Quick access -->
+          <div class="home-section-container" style="margin-top: 48px;">
+            <div class="section-header-row">
+              <div class="section-title-left">
+                <span class="pre-heading">CUSTOMER FAVORITES</span>
+                <h4 class="home-group-title">Popular Choices</h4>
+              </div>
+              <button class="btn-text btn-explore-more" id="link-go-to-menu">
+                <span>View Full Menu</span>
+                <svg class="text-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </button>
+            </div>
+            <div class="popular-grid" id="home-popular-grid">
+              <!-- Rendered Dynamically by JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- MENU SECTION -->
+        <section id="sect-menu" class="content-section">
+          <!-- Search & Category Filters -->
+          <div class="menu-control-bar">
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" id="menu-search-input" placeholder="Search premium blends, pastries, snacks...">
+            </div>
+            
+            <div class="category-filter-wrapper">
+              <div class="category-scroll-container" id="category-capsule-row">
+                <button class="capsule active" data-category="all">All Items</button>
+                <button class="capsule" data-category="Coffee">Coffee</button>
+                <button class="capsule" data-category="Non-Coffee">Non-Coffee</button>
+                <button class="capsule" data-category="Tea">Tea</button>
+                <button class="capsule" data-category="Pastries">Pastries</button>
+                <button class="capsule" data-category="Snacks">Snacks</button>
+                <button class="capsule" data-category="Desserts">Desserts</button>
+                <button class="capsule" data-category="Add-ons">Add-ons</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Menu Cards Grid -->
+          <div class="menu-grid" id="menu-items-grid">
+            <!-- Rendered Dynamically by JS -->
+          </div>
+        </section>
+
+        <!-- CART SECTION -->
+        <section id="sect-cart" class="content-section">
+          <div class="cart-layout">
+            <div class="cart-items-container">
+              <h3>Selected Products</h3>
+              
+              <div class="cart-list" id="cart-list-container">
+                <!-- Rendered dynamically by JS -->
+              </div>
+            </div>
+
+            <div class="cart-summary-card">
+              <h4>Order Summary</h4>
+              <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">$0.00</span>
+              </div>
+              <div class="summary-row promo-applied">
+                <span>Gold Discount (10%)</span>
+                <span id="cart-discount">-$0.00</span>
+              </div>
+              <div class="summary-row">
+                <span>Sales Tax (8%)</span>
+                <span id="cart-tax">$0.00</span>
+              </div>
+              <div class="summary-divider"></div>
+              <div class="summary-row total-row">
+                <span>Total</span>
+                <span id="cart-total">$0.00</span>
+              </div>
+              <button class="btn btn-primary btn-checkout-action w-100" id="btn-checkout">Checkout Order</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- MY ORDERS SECTION -->
+        <section id="sect-orders" class="content-section">
+          <div class="orders-tabs">
+            <button class="tab-btn active" id="btn-tab-active-orders">Active Orders</button>
+            <button class="tab-btn" id="btn-tab-order-history">Order History</button>
+          </div>
+
+          <!-- Active/Current Orders View -->
+          <div id="active-orders-view" class="orders-tab-content active">
+            <div class="orders-list-container" id="active-orders-list">
+              <!-- Dynamic Active Orders cards -->
+            </div>
+          </div>
+
+          <!-- Past Order History View -->
+          <div id="history-orders-view" class="orders-tab-content">
+            <div class="orders-table-wrapper">
+              <table class="orders-table">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Items Purchased</th>
+                    <th>Total Price</th>
+                    <th>Final Status</th>
+                    <th>Reorder</th>
+                  </tr>
+                </thead>
+                <tbody id="past-orders-table-body">
+                  <!-- Rendered dynamically by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- PROFILE SECTION -->
+        <section id="sect-profile" class="content-section">
+          <div class="profile-layout">
+            <div class="profile-main-card">
+              <div class="profile-header-card">
+                <div class="profile-avatar-large">JD</div>
+                <div class="profile-meta">
+                  <h3 id="profile-card-name">John Doe</h3>
+                  <p>Member since August 2026</p>
+                  <span class="tier-label gold" id="profile-card-status">Active Gold Member</span>
+                </div>
+              </div>
+
+              <form class="profile-form" id="profile-form" novalidate>
+                <div class="profile-form-grid">
+                  <div class="field-group">
+                    <label for="prof-name">Full Name</label>
+                    <input type="text" id="prof-name" value="John Doe" required autocomplete="name">
+                  </div>
+                  <div class="field-group">
+                    <label for="prof-email">Email Address</label>
+                    <input type="email" id="prof-email" value="john.doe@example.com" required autocomplete="email" readonly>
+                  </div>
+                  <div class="field-group">
+                    <label for="prof-phone">Contact Number</label>
+                    <input type="tel" id="prof-phone" value="+1 (555) 234-5678" autocomplete="tel" required>
+                  </div>
+                  <div class="field-group">
+                    <label for="prof-status">Account Status</label>
+                    <input type="text" id="prof-status" value="Active Gold Member" readonly disabled>
+                  </div>
+                  <div class="field-group full-width-field">
+                    <label for="prof-address">Delivery Address</label>
+                    <textarea id="prof-address" rows="3" required placeholder="Enter your full street address, unit number, and ZIP code">123 Espresso Lane, Caramel Heights, NY 10001</textarea>
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary" id="btn-save-profile">Update Profile</button>
+              </form>
+            </div>
+
+            <!-- Loyalty Graphics Card -->
+            <div class="loyalty-card-graphic">
+              <div class="loyalty-inner">
+                <div class="loyalty-card-header">
+                  <span class="shop-name">THE DAILY GRIND</span>
+                  <span class="card-tier">GOLD</span>
+                </div>
+                <div class="loyalty-card-body">
+                  <div class="loyalty-card-stars">
+                    <svg class="loyalty-star" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    <svg class="loyalty-star" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    <svg class="loyalty-star" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    <svg class="loyalty-star" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                    <svg class="loyalty-star" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                  </div>
+                  <span class="card-number">MEMBER ID: 8892 1042</span>
+                </div>
+                <div class="loyalty-card-footer">
+                  <div class="barcode-mock">
+                    ||||| ||| |||| || ||| |||| |||
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- PRODUCT DETAILS & CUSTOMIZATION MODAL -->
+  <div id="product-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-product-title">
+    <div class="modal-content">
+      <button class="close-modal-btn" aria-label="Close modal" id="btn-close-modal">&times;</button>
+      <div class="modal-body">
+        <div class="modal-img-container" id="modal-product-img-wrapper">
+          <!-- Dynamically renders SVG -->
+        </div>
+        <div class="modal-product-info">
+          <h3 id="modal-product-title">Signature Espresso</h3>
+          <p id="modal-product-desc">Rich, dark roast with notes of caramel and cocoa.</p>
+          <div class="modal-price-row">
+            <span class="price-label">Price:</span>
+            <span id="modal-product-price" class="product-price">$3.50</span>
+          </div>
+
+          <form id="customization-form">
+            <!-- Size Customization -->
+            <div class="custom-group">
+              <span class="custom-label">Select Size</span>
+              <div class="custom-options">
+                <label class="option-card">
+                  <input type="radio" name="size" value="Regular" data-add="0" checked>
+                  <span class="option-name">Regular</span>
+                  <span class="option-add">+$0.00</span>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="size" value="Medium" data-add="0.50">
+                  <span class="option-name">Medium</span>
+                  <span class="option-add">+$0.50</span>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="size" value="Large" data-add="1.00">
+                  <span class="option-name">Large</span>
+                  <span class="option-add">+$1.00</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Milk Customization (conditionally shown in JS) -->
+            <div class="custom-group" id="modal-milk-group">
+              <span class="custom-label">Select Milk</span>
+              <div class="custom-options">
+                <label class="option-card">
+                  <input type="radio" name="milk" value="Whole Milk" data-add="0" checked>
+                  <span class="option-name">Whole Milk</span>
+                  <span class="option-add">+$0.00</span>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="milk" value="Oat Milk" data-add="0.50">
+                  <span class="option-name">Oat Milk</span>
+                  <span class="option-add">+$0.50</span>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="milk" value="Almond Milk" data-add="0.50">
+                  <span class="option-name">Almond Milk</span>
+                  <span class="option-add">+$0.50</span>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="milk" value="Non-Fat Milk" data-add="0">
+                  <span class="option-name">Non-Fat</span>
+                  <span class="option-add">+$0.00</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Sweetness Customization (conditionally shown in JS) -->
+            <div class="custom-group" id="modal-sweetness-group">
+              <span class="custom-label">Sweetness Level</span>
+              <div class="custom-options">
+                <label class="option-card">
+                  <input type="radio" name="sweetness" value="Normal" checked>
+                  <span class="option-name">Normal</span>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="sweetness" value="Half Sweet">
+                  <span class="option-name">Half Sweet</span>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="sweetness" value="Extra Sweet">
+                  <span class="option-name">Extra Sweet</span>
+                </label>
+                <label class="option-card">
+                  <input type="radio" name="sweetness" value="Unsweetened">
+                  <span class="option-name">Unsweetened</span>
+                </label>
+              </div>
+            </div>
+          </form>
+
+          <div class="modal-footer-action">
+            <button class="btn btn-primary" id="btn-modal-add-to-cart">Add to Order</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="api_client.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Access the Daily Grind coffee shop portal. Sign in or create an account to manage orders, earn loyalty rewards, and explore premium blends.">
+  <title>The Daily Grind | Member Portal</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Toast Notification System -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <!-- Background overlay overlaying the generated image -->
+  <div class="bg-blur-overlay"></div>
+
+  <main class="auth-wrapper">
+    <div class="auth-container" id="auth-container">
+      
+      <!-- SIGN UP FORM -->
+      <div class="form-container sign-up-container">
+        <form id="signup-form" novalidate>
+          <div class="brand-header">
+            <svg class="brand-logo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M17 8h1a4 4 0 1 1 0 8h-1"/>
+              <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/>
+              <line x1="6" y1="2" x2="6" y2="4"/>
+              <line x1="10" y1="2" x2="10" y2="4"/>
+              <line x1="14" y1="2" x2="14" y2="4"/>
+            </svg>
+            <h1 class="brand-title">The Daily Grind</h1>
+          </div>
+          <h2>Create Account</h2>
+          <p class="form-subtitle">Join us for the ultimate coffee experience.</p>
+          
+          <!-- Full Name -->
+          <div class="field-group">
+            <label for="signup-name">Full Name</label>
+            <input
+              type="text"
+              id="signup-name"
+              name="name"
+              placeholder="e.g. John Doe"
+              required
+              autocomplete="name"
+              enterkeyhint="next"
+            >
+            <div id="signup-name-error" class="error-msg">
+              <svg class="error-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>Please enter your full name.</span>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="field-group">
+            <label for="signup-email">Email Address</label>
+            <span id="signup-email-hint" class="hint">Format: you@example.com</span>
+            <input
+              type="email"
+              id="signup-email"
+              name="email"
+              placeholder="you@example.com"
+              required
+              autocomplete="username"
+              aria-describedby="signup-email-hint"
+              enterkeyhint="next"
+            >
+            <div id="signup-email-error" class="error-msg">
+              <svg class="error-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>Please enter a valid email address.</span>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="field-group">
+            <label for="signup-password">Password</label>
+            <!-- Rules placed above the input for visibility and accessibility -->
+            <ul id="password-rules" class="rules-list">
+              <li id="rule-length">At least 8 characters</li>
+              <li id="rule-uppercase">One uppercase letter</li>
+              <li id="rule-number">One number</li>
+              <li id="rule-special">One special character</li>
+            </ul>
+            <div class="password-input-wrapper">
+              <input
+                type="password"
+                id="signup-password"
+                name="new-password"
+                placeholder="••••••••"
+                required
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{8,}"
+                autocomplete="new-password"
+                aria-describedby="password-rules"
+                enterkeyhint="done"
+              >
+              <button 
+                type="button" 
+                class="toggle-password-btn" 
+                aria-label="Show password"
+                title="Show password"
+              >
+                SHOW
+              </button>
+            </div>
+            <div id="signup-password-error" class="error-msg">
+              <svg class="error-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>Password does not meet security requirements.</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="btn-signup">Create Account</button>
+          
+          <div class="mobile-toggle-helper">
+            Already have an account? <button type="button" class="btn-text" id="toggle-to-signin">Sign In</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- SIGN IN FORM -->
+      <div class="form-container sign-in-container">
+        <form id="signin-form" novalidate>
+          <div class="brand-header">
+            <svg class="brand-logo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M17 8h1a4 4 0 1 1 0 8h-1"/>
+              <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/>
+              <line x1="6" y1="2" x2="6" y2="4"/>
+              <line x1="10" y1="2" x2="10" y2="4"/>
+              <line x1="14" y1="2" x2="14" y2="4"/>
+            </svg>
+            <h1 class="brand-title">The Daily Grind</h1>
+          </div>
+          <h2>Welcome Back</h2>
+          <p class="form-subtitle">Savor the aroma of premium coffee once again.</p>
+
+          <!-- Email -->
+          <div class="field-group">
+            <label for="signin-email">Email Address</label>
+            <input
+              type="email"
+              id="signin-email"
+              name="email"
+              placeholder="you@example.com"
+              required
+              autocomplete="username"
+              enterkeyhint="next"
+            >
+            <div id="signin-email-error" class="error-msg">
+              <svg class="error-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>Please enter a valid email address.</span>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="field-group">
+            <div class="label-row">
+              <label for="signin-password">Password</label>
+              <a href="#" class="forgot-password-link">Forgot password?</a>
+            </div>
+            <div class="password-input-wrapper">
+              <input
+                type="password"
+                id="signin-password"
+                name="password"
+                placeholder="••••••••"
+                required
+                autocomplete="current-password"
+                enterkeyhint="done"
+              >
+              <button 
+                type="button" 
+                class="toggle-password-btn" 
+                aria-label="Show password"
+                title="Show password"
+              >
+                SHOW
+              </button>
+            </div>
+            <div id="signin-password-error" class="error-msg">
+              <svg class="error-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              <span>Password is required.</span>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="btn-signin">Sign In</button>
+          
+          <div class="mobile-toggle-helper">
+            New to the shop? <button type="button" class="btn-text" id="toggle-to-signup">Create Account</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- OVERLAY PANELS FOR DESKTOP -->
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h3>Welcome Back, Friend!</h3>
+            <p>To keep connected with your rewards, please log in with your personal info.</p>
+            <button class="btn btn-outline" id="signIn">Sign In</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h3>Hello, Coffee Lover!</h3>
+            <p>Enter your details and start your journey with our coffee community rewards.</p>
+            <button class="btn btn-outline" id="signUp">Sign Up</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="api_client.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

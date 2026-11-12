@@ -1,0 +1,786 @@
+/**
+ * The Daily Grind Coffee Shop - Barista Kitchen Display System (KDS) Stylesheet
+ * High-contrast, touch-optimized espresso & gold kitchen interface
+ */
+
+/* ==========================================================================
+   1. CORE VARIABLES & BASE RESET
+   ========================================================================== */
+:root {
+  --kds-bg: #141210;
+  --kds-surface: #1e1b18;
+  --kds-surface-elevated: #282420;
+  --kds-surface-light: #342f2a;
+  --kds-border: rgba(218, 165, 32, 0.18);
+  --kds-border-light: rgba(255, 255, 255, 0.08);
+  --kds-text: #fdfaf6;
+  --kds-text-muted: #a39990;
+  --kds-accent: #daa520;
+  --kds-accent-hover: #b8860b;
+  --kds-orange: #f59e0b;
+  --kds-green: #10b981;
+  --kds-red: #ef4444;
+  --kds-radius: 12px;
+  --kds-radius-sm: 8px;
+  --kds-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+body.barista-body {
+  background-color: var(--kds-bg);
+  color: var(--kds-text);
+  font-family: var(--font-sans);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.kds-app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ==========================================================================
+   2. TOP KDS HEADER
+   ========================================================================== */
+.kds-header {
+  background-color: var(--kds-surface);
+  border-bottom: 1px solid var(--kds-border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.kds-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.kds-brand-logo {
+  width: 32px;
+  height: 32px;
+  stroke: var(--kds-accent);
+}
+
+.kds-brand-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--kds-text);
+  margin: 0;
+  line-height: 1.1;
+}
+
+.barista-portal-tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: #ffaa5a;
+  background: rgba(245, 158, 11, 0.18);
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  margin-top: 2px;
+}
+
+.kds-center-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.kds-station-selector-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--kds-text-muted);
+}
+
+.kds-station-select {
+  background: var(--kds-surface-elevated);
+  color: var(--kds-text);
+  border: 1px solid var(--kds-border);
+  padding: 6px 12px;
+  border-radius: var(--kds-radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+}
+
+.kds-ticket-summary-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(218, 165, 32, 0.12);
+  border: 1px solid rgba(218, 165, 32, 0.25);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--kds-accent);
+}
+
+.kds-summary-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--kds-green);
+}
+
+.kds-summary-dot.pulse {
+  animation: pulse-green 1.8s infinite;
+}
+
+@keyframes pulse-green {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { transform: scale(1.15); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.btn-kds-control {
+  background: var(--kds-surface-elevated);
+  border: 1px solid var(--kds-border-light);
+  color: var(--kds-text);
+  padding: 6px 12px;
+  border-radius: var(--kds-radius-sm);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-kds-control:hover {
+  background: var(--kds-surface-light);
+  border-color: var(--kds-accent);
+}
+
+.kds-user-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.kds-switchers-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kds-barista-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 8px;
+  border-left: 1px solid var(--kds-border-light);
+}
+
+.barista-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #c84021 0%, #8b5a2b 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.barista-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.barista-info strong {
+  font-size: 0.82rem;
+  color: var(--kds-text);
+}
+
+.barista-info span {
+  font-size: 0.70rem;
+  color: var(--kds-text-muted);
+}
+
+.btn-kds-logout {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ff6b6b;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--kds-radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.btn-kds-logout:hover {
+  background: var(--kds-red);
+  color: #fff;
+}
+
+/* ==========================================================================
+   3. KDS SUB-NAVIGATION & FILTER BAR
+   ========================================================================== */
+.kds-subnav {
+  background-color: var(--kds-surface-elevated);
+  border-bottom: 1px solid var(--kds-border-light);
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.kds-status-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.kds-tab {
+  background: transparent;
+  border: 1px solid var(--kds-border-light);
+  color: var(--kds-text-muted);
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.kds-tab:hover {
+  color: var(--kds-text);
+  border-color: rgba(218, 165, 32, 0.4);
+}
+
+.kds-tab.active {
+  background: var(--kds-accent);
+  color: #1a140e;
+  border-color: var(--kds-accent);
+  font-weight: 700;
+}
+
+.kds-tab-badge {
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+  font-size: 0.72rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  min-width: 14px;
+  text-align: center;
+}
+
+.kds-tab.active .kds-tab-badge {
+  background: rgba(0, 0, 0, 0.4);
+  color: #ffffff;
+}
+
+.kds-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.kds-select-sm {
+  background: var(--kds-surface);
+  color: var(--kds-text);
+  border: 1px solid var(--kds-border-light);
+  padding: 6px 12px;
+  border-radius: var(--kds-radius-sm);
+  font-size: 0.82rem;
+  font-weight: 500;
+  outline: none;
+}
+
+/* ==========================================================================
+   4. KDS MAIN TICKETS GRID & CARDS
+   ========================================================================== */
+.kds-main-board {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.kds-tickets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+.kds-loading-state,
+.kds-empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--kds-text-muted);
+}
+
+.kds-spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid rgba(218, 165, 32, 0.2);
+  border-top-color: var(--kds-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* TICKET CARD */
+.kds-ticket-card {
+  background-color: var(--kds-surface);
+  border: 1px solid var(--kds-border-light);
+  border-radius: var(--kds-radius);
+  overflow: hidden;
+  box-shadow: var(--kds-shadow);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  position: relative;
+}
+
+.kds-ticket-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Status variants */
+.kds-ticket-card.status-pending {
+  border-top: 4px solid var(--kds-orange);
+}
+
+.kds-ticket-card.status-preparing {
+  border-top: 4px solid #3b82f6;
+  animation: card-brew-glow 3s infinite alternate;
+}
+
+@keyframes card-brew-glow {
+  0% { box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1); }
+  100% { box-shadow: 0 6px 22px rgba(59, 130, 246, 0.25); }
+}
+
+.kds-ticket-card.status-ready {
+  border-top: 4px solid var(--kds-green);
+}
+
+.kds-ticket-card.status-completed {
+  border-top: 4px solid #6b7280;
+  opacity: 0.8;
+}
+
+/* Card Header */
+.kds-card-header {
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--kds-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kds-card-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kds-order-id {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--kds-text);
+  letter-spacing: 0.5px;
+}
+
+.kds-cust-name {
+  font-size: 0.82rem;
+  color: var(--kds-text-muted);
+}
+
+.kds-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.kds-channel-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.kds-channel-badge.pos {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.35);
+}
+
+.kds-channel-badge.online {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+/* Timer Badge */
+.kds-timer {
+  font-size: 0.76rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.timer-normal {
+  color: var(--kds-green);
+}
+
+.timer-warning {
+  color: var(--kds-orange);
+  background: rgba(245, 158, 11, 0.15);
+}
+
+.timer-urgent {
+  color: var(--kds-red);
+  background: rgba(239, 68, 68, 0.2);
+  animation: pulse-urgent 1.5s infinite;
+}
+
+@keyframes pulse-urgent {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Card Body - Item List */
+.kds-card-items {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.kds-item-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.025);
+  border-radius: var(--kds-radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.kds-item-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.kds-item-row.item-done {
+  opacity: 0.45;
+  text-decoration: line-through;
+  background: transparent;
+}
+
+.kds-item-check {
+  margin-top: 3px;
+  accent-color: var(--kds-accent);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.kds-item-details {
+  flex: 1;
+}
+
+.kds-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kds-item-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--kds-text);
+}
+
+.kds-item-qty {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--kds-accent);
+  background: rgba(218, 165, 32, 0.15);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.kds-custom-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 5px;
+}
+
+.kds-tag {
+  font-size: 0.72rem;
+  background: var(--kds-surface-light);
+  color: #ffd8a8;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.kds-tag.note-tag {
+  background: rgba(200, 64, 33, 0.25);
+  color: #ff9b82;
+  border: 1px solid rgba(200, 64, 33, 0.4);
+}
+
+/* Card Action Footer */
+.kds-card-footer {
+  padding: 12px 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid var(--kds-border-light);
+  display: flex;
+  gap: 8px;
+}
+
+.btn-kds-action {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: var(--kds-radius-sm);
+  font-size: 0.88rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.btn-brew-start {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: #ffffff;
+}
+
+.btn-brew-start:hover {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  transform: scale(1.02);
+}
+
+.btn-mark-ready {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+}
+
+.btn-mark-ready:hover {
+  background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+  transform: scale(1.02);
+}
+
+.btn-mark-completed {
+  background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+  color: #ffffff;
+}
+
+.btn-mark-completed:hover {
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+}
+
+.btn-recall {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--kds-text-muted);
+  border: 1px solid var(--kds-border-light);
+}
+
+.btn-recall:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--kds-text);
+}
+
+/* ==========================================================================
+   5. BARISTA STOCK & DEPLETION MANAGER MODAL
+   ========================================================================== */
+.stock-modal-search-bar {
+  margin-bottom: 16px;
+}
+
+.stock-modal-search-bar input {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--kds-surface-elevated);
+  border: 1px solid var(--kds-border);
+  color: var(--kds-text);
+  border-radius: var(--kds-radius-sm);
+  font-size: 0.9rem;
+}
+
+.barista-stock-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 14px;
+  max-height: 550px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.barista-stock-card {
+  background: var(--kds-surface);
+  border: 1px solid var(--kds-border-light);
+  border-radius: var(--kds-radius-sm);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.barista-stock-card.out-of-stock {
+  opacity: 0.6;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.barista-stock-info h5 {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--kds-text);
+}
+
+.barista-stock-info span {
+  font-size: 0.72rem;
+  color: var(--kds-text-muted);
+}
+
+.btn-toggle-stock-switch {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.btn-toggle-stock-switch.in-stock {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.btn-toggle-stock-switch.in-stock:hover {
+  background: #10b981;
+  color: #fff;
+}
+
+.btn-toggle-stock-switch.out-stock {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.btn-toggle-stock-switch.out-stock:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+/* Recipe Cards */
+.recipe-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recipe-card {
+  background: var(--kds-surface);
+  border: 1px solid var(--kds-border-light);
+  border-radius: var(--kds-radius-sm);
+  padding: 14px;
+}
+
+.recipe-card h4 {
+  margin: 0 0 6px;
+  font-size: 0.95rem;
+  color: var(--kds-accent);
+}
+
+.recipe-card p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--kds-text-muted);
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   6. RESPONSIVE DESIGN (TABLETS & MOBILE)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .kds-header {
+    flex-wrap: wrap;
+    padding: 10px 16px;
+  }
+  
+  .kds-center-controls {
+    order: 3;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .kds-tickets-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .kds-switchers-row {
+    display: none;
+  }
+  
+  .kds-subnav {
+    padding: 10px 16px;
+  }
+
+  .kds-main-board {
+    padding: 16px;
+  }
+
+  .kds-tickets-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kitchen Display System (KDS) & Barista Order Fulfillment Station for The Daily Grind.">
+  <title>Barista KDS Station | The Daily Grind</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="staff.css">
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="barista.css">
+</head>
+<body class="barista-body">
+  <!-- Toast Notification System -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <!-- Audio Chime Element for New Orders -->
+  <audio id="order-chime-sound" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"></audio>
+
+  <div class="kds-app-container">
+    <!-- TOP BARISTA HEADER -->
+    <header class="kds-header">
+      <div class="kds-brand-group">
+        <svg class="kds-brand-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M17 8h1a4 4 0 1 1 0 8h-1"/>
+          <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/>
+          <line x1="6" y1="2" x2="6" y2="4"/>
+          <line x1="10" y1="2" x2="10" y2="4"/>
+          <line x1="14" y1="2" x2="14" y2="4"/>
+        </svg>
+        <div>
+          <h1 class="kds-brand-title">The Daily Grind</h1>
+          <span class="barista-portal-tag">BARISTA KDS STATION</span>
+        </div>
+      </div>
+
+      <div class="kds-center-controls">
+        <div class="kds-station-selector-wrapper">
+          <label for="kds-station-select">Station:</label>
+          <select id="kds-station-select" class="kds-station-select">
+            <option value="all">All Kitchen Stations</option>
+            <option value="espresso" selected>Espresso Bar #01</option>
+            <option value="cold">Cold Brew & Nitro Bar</option>
+            <option value="pourover">Tea & Pour-Over Bar</option>
+          </select>
+        </div>
+
+        <div class="kds-ticket-summary-pill">
+          <span class="kds-summary-dot pulse"></span>
+          <span id="kds-active-count-text">0 Active Tickets</span>
+        </div>
+
+        <button id="btn-toggle-sound" class="btn-kds-control" title="Toggle audio chime on new orders">
+          <span id="sound-icon">🔔</span> <span id="sound-text">Sound ON</span>
+        </button>
+      </div>
+
+      <div class="kds-user-actions">
+        <!-- Quick Role Switchers -->
+        <div class="kds-switchers-row">
+          <a href="staff.html" class="btn-mode-switch btn-outline" title="Switch to Staff POS Terminal">
+            <svg class="nav-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px; height:14px;"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            <span>POS Register</span>
+          </a>
+          <a href="admin.html" class="btn-mode-switch btn-outline" title="Switch to Admin Management">
+            <svg class="nav-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px; height:14px;"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+            <span>Admin</span>
+          </a>
+          <a href="dashboard.html" class="btn-mode-switch btn-outline" title="Switch to Customer Menu">
+            <svg class="nav-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px; height:14px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Customer View</span>
+          </a>
+        </div>
+
+        <div class="kds-barista-badge">
+          <div class="barista-avatar">MV</div>
+          <div class="barista-info">
+            <strong id="barista-name-display">Marcus Vance</strong>
+            <span>Lead Barista</span>
+          </div>
+        </div>
+
+        <button id="btn-barista-logout" class="btn-kds-logout" title="Sign Out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px;"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- BARISTA SUB-HEADER & FILTER TABS -->
+    <nav class="kds-subnav">
+      <div class="kds-status-tabs" id="kds-status-filter-tabs">
+        <button class="kds-tab active" data-status="active">
+          <span>Active Tickets</span>
+          <span class="kds-tab-badge" id="badge-tab-active">0</span>
+        </button>
+        <button class="kds-tab" data-status="Pending">
+          <span>Pending (New)</span>
+          <span class="kds-tab-badge" id="badge-tab-pending">0</span>
+        </button>
+        <button class="kds-tab" data-status="Preparing">
+          <span>Preparing (In Brew)</span>
+          <span class="kds-tab-badge" id="badge-tab-preparing">0</span>
+        </button>
+        <button class="kds-tab" data-status="Ready">
+          <span>Ready for Pickup</span>
+          <span class="kds-tab-badge" id="badge-tab-ready">0</span>
+        </button>
+        <button class="kds-tab" data-status="Completed">
+          <span>Completed History</span>
+          <span class="kds-tab-badge" id="badge-tab-completed">0</span>
+        </button>
+      </div>
+
+      <div class="kds-right-actions">
+        <!-- Channel Filter -->
+        <select id="kds-channel-filter" class="kds-select-sm">
+          <option value="all">All Channels (POS & Online)</option>
+          <option value="online">Online Orders Only</option>
+          <option value="pos">POS Register Only</option>
+        </select>
+
+        <button id="btn-open-stock-manager" class="btn btn-outline btn-sm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px; height:14px;"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          <span>Quick Stock Availability</span>
+        </button>
+
+        <button id="btn-open-recipe-guide" class="btn btn-outline btn-sm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px; height:14px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>Recipes & Ratios</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- MAIN KDS TICKETS BOARD -->
+    <main class="kds-main-board" id="kds-main-board">
+      <div id="kds-tickets-container" class="kds-tickets-grid">
+        <!-- Rendered dynamically by barista.js -->
+        <div class="kds-loading-state">
+          <div class="kds-spinner"></div>
+          <p>Connecting to Live Kitchen Display Queue...</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: BARISTA QUICK INGREDIENT & PRODUCT AVAILABILITY MANAGER -->
+  <div id="barista-stock-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content modal-lg">
+      <button class="close-modal-btn" id="btn-close-barista-stock">&times;</button>
+      <div class="modal-header-simple">
+        <h3>Barista Availability & Depletion Manager</h3>
+        <p>1-Click instant toggle for ingredients, espresso beans, milk variants, and catalog items.</p>
+      </div>
+      <div class="modal-body-padded">
+        <div class="stock-modal-search-bar">
+          <input type="text" id="barista-stock-search" placeholder="Search drinks or ingredients (e.g. Oat Milk, Cold Brew, Croissant)...">
+        </div>
+        <div class="barista-stock-grid" id="barista-stock-grid">
+          <!-- Rendered dynamically by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: RECIPES & BREWING RATIOS QUICK CHEAT SHEET -->
+  <div id="barista-recipe-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content modal-md">
+      <button class="close-modal-btn" id="btn-close-recipe-modal">&times;</button>
+      <div class="modal-header-simple">
+        <h3>Espresso & Drink Standards Quick Guide</h3>
+        <p>Official Daily Grind brewing parameters, steam temperatures, and pump counts.</p>
+      </div>
+      <div class="modal-body-padded">
+        <div class="recipe-cards-list">
+          <div class="recipe-card">
+            <h4>☕ Signature Espresso Dose & Yield</h4>
+            <p><strong>Dose:</strong> 18.5g in • <strong>Yield:</strong> 37g out • <strong>Time:</strong> 26–29 seconds • <strong>Temp:</strong> 93.5°C</p>
+          </div>
+          <div class="recipe-card">
+            <h4>🥛 Milk Steaming Temperatures</h4>
+            <p><strong>Whole / 2%:</strong> 62°C–65°C • <strong>Oat / Almond:</strong> 58°C–60°C • <strong>Extra Hot:</strong> 72°C max</p>
+          </div>
+          <div class="recipe-card">
+            <h4>🍯 Flavor Syrup Standard Pumps</h4>
+            <p><strong>Small (12oz):</strong> 2 pumps • <strong>Medium (16oz):</strong> 3 pumps • <strong>Large (20oz):</strong> 4 pumps • <strong>Half Sweet:</strong> Cut in half</p>
+          </div>
+          <div class="recipe-card">
+            <h4>🍵 Ceremonial Matcha Latte Prep</h4>
+            <p><strong>Whisk:</strong> 3.5g Uji Matcha with 40ml 80°C water for 30s until frothy, then combine with steamed oat milk.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="api_client.js"></script>
+  <script src="barista.js"></script>
+</body>
+</html>

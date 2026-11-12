@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Store Administration & Analytics Portal for The Daily Grind Coffee Shop.">
+  <title>Admin Portal | The Daily Grind</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="staff.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <!-- Toast Notification System -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <div class="dashboard-container admin-container">
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar admin-sidebar" aria-label="Admin Navigation">
+      <div class="sidebar-header">
+        <svg class="logo-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M17 8h1a4 4 0 1 1 0 8h-1"/>
+          <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/>
+          <line x1="6" y1="2" x2="6" y2="4"/>
+          <line x1="10" y1="2" x2="10" y2="4"/>
+          <line x1="14" y1="2" x2="14" y2="4"/>
+        </svg>
+        <div class="brand-title-wrap">
+          <h1 class="logo-text">The Daily Grind</h1>
+          <span class="staff-portal-tag admin-portal-tag">ADMIN PORTAL</span>
+        </div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <!-- MAIN GROUP -->
+          <li class="nav-group-header">MAIN</li>
+          <li>
+            <button class="nav-item active" data-target="dashboard" aria-current="page">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="9" rx="1"/>
+                <rect x="14" y="3" width="7" height="5" rx="1"/>
+                <rect x="14" y="12" width="7" height="9" rx="1"/>
+                <rect x="3" y="16" width="7" height="5" rx="1"/>
+              </svg>
+              <span>Dashboard</span>
+            </button>
+          </li>
+
+          <!-- ORDER MANAGEMENT GROUP -->
+          <li class="nav-group-header">ORDER MANAGEMENT</li>
+          <li>
+            <button class="nav-item" data-target="orders">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+              <span>Orders</span>
+            </button>
+          </li>
+
+          <!-- CUSTOMER MANAGEMENT GROUP -->
+          <li class="nav-group-header">CUSTOMER MANAGEMENT</li>
+          <li>
+            <button class="nav-item" data-target="customers">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+              <span>Customers</span>
+            </button>
+          </li>
+
+          <!-- PRODUCT MANAGEMENT GROUP -->
+          <li class="nav-group-header">PRODUCT MANAGEMENT</li>
+          <li>
+            <button class="nav-item" data-target="products">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8h1a4 4 0 1 1 0 8h-1"/>
+                <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/>
+                <line x1="6" y1="2" x2="6" y2="4"/>
+                <line x1="10" y1="2" x2="10" y2="4"/>
+                <line x1="14" y1="2" x2="14" y2="4"/>
+              </svg>
+              <span>Products</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-target="categories">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 6h16M4 12h16M4 18h7"/>
+              </svg>
+              <span>Categories</span>
+            </button>
+          </li>
+
+          <!-- INVENTORY GROUP -->
+          <li class="nav-group-header">INVENTORY</li>
+          <li>
+            <button class="nav-item" data-target="inventory">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                <line x1="12" y1="22.08" x2="12" y2="12"/>
+              </svg>
+              <span>Inventory</span>
+            </button>
+          </li>
+
+          <!-- SALES & ANALYTICS GROUP -->
+          <li class="nav-group-header">SALES & ANALYTICS</li>
+          <li>
+            <button class="nav-item" data-target="sales">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+              <span>Sales</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-target="reports">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+              <span>Reports</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-target="product-performance">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                <polyline points="17 6 23 6 23 12"/>
+              </svg>
+              <span>Product Performance</span>
+            </button>
+          </li>
+
+          <!-- SYSTEM GROUP -->
+          <li class="nav-group-header">SYSTEM</li>
+          <li>
+            <button class="nav-item" data-target="staff-users">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                <circle cx="8.5" cy="7" r="4"/>
+                <line x1="20" y1="8" x2="20" y2="14"/>
+                <line x1="23" y1="11" x2="17" y2="11"/>
+              </svg>
+              <span>Staff / Users</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-target="notifications">
+              <div class="icon-badge-wrapper">
+                <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+                <span class="cart-badge" id="admin-notif-count">3</span>
+              </div>
+              <span>Notifications</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item" data-target="settings">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+              <span>Settings</span>
+            </button>
+          </li>
+          <li>
+            <button class="nav-item nav-logout" id="btn-logout-sidebar">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+              <span>Logout</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-shortcut">
+          <div class="avatar admin-avatar">AD</div>
+          <div class="user-details">
+            <span class="user-name">Admin Director</span>
+            <span class="user-role">Super Administrator</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT VIEWPORTS -->
+    <main class="main-content">
+      <!-- Top header bar -->
+      <header class="content-header">
+        <div class="header-left">
+          <h2 id="section-title">Dashboard</h2>
+          <span class="header-subtext" id="section-subtext">System-wide Sales Overview & Store Management</span>
+        </div>
+        <div class="header-right" style="display: flex; align-items: center; gap: 12px;">
+          <a href="barista.html" class="btn btn-outline btn-mode-switch">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 8h1a4 4 0 1 1 0 8h-1"/>
+              <path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V8z"/>
+            </svg>
+            <span>Barista KDS</span>
+          </a>
+          <a href="staff.html" class="btn btn-outline btn-mode-switch">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+            </svg>
+            <span>Staff POS</span>
+          </a>
+          <a href="dashboard.html" class="btn btn-outline btn-mode-switch">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span>Customer View</span>
+          </a>
+        </div>
+      </header>
+
+      <div class="content-body admin-content-body">
+        
+        <!-- MODULE 1: DASHBOARD -->
+        <section id="sect-dashboard" class="content-section active">
+          
+          <!-- SALES OVERVIEW METRICS -->
+          <div class="section-title-row mb-16">
+            <span class="pre-heading">FINANCIAL PERFORMANCE</span>
+            <h3 class="admin-group-title">Sales Overview</h3>
+          </div>
+          <div class="orders-metrics-row">
+            <div class="metric-card highlight-metric">
+              <span class="metric-title">Total Sales</span>
+              <span class="metric-val" id="dash-total-sales">$0.00</span>
+              <span class="metric-sub">Gross Store Revenue</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-title">Total Orders</span>
+              <span class="metric-val" id="dash-total-orders">0</span>
+              <span class="metric-sub">Processed Receipts</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-title">Average Order Value (AOV)</span>
+              <span class="metric-val" id="dash-avg-order-val">$0.00</span>
+              <span class="metric-sub">Per Ticket Average</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-title">Completed Orders</span>
+              <span class="metric-val" id="dash-completed-orders">0</span>
+              <span class="metric-sub">Fulfilled Transactions</span>
+            </div>
+          </div>
+
+          <!-- DUAL COLUMN DASHBOARD GRID -->
+          <div class="dash-grid-row">
+            
+            <!-- LEFT: PRODUCT PERFORMANCE & INVENTORY OVERVIEW -->
+            <div class="dash-col">
+              
+              <!-- PRODUCT PERFORMANCE CARD -->
+              <div class="admin-card">
+                <div class="admin-card-header">
+                  <h4>Product Performance Summary</h4>
+                  <button class="btn-text" id="dash-link-product-perf">View Full Details &rarr;</button>
+                </div>
+                <div class="dash-perf-stats-row">
+                  <div class="perf-stat-pill">
+                    <span class="pill-lbl">Best-Selling Product</span>
+                    <strong class="pill-val" id="dash-best-product">Signature Espresso</strong>
+                  </div>
+                  <div class="perf-stat-pill">
+                    <span class="pill-lbl">Top Ordered Category</span>
+                    <strong class="pill-val" id="dash-top-category">Coffee</strong>
+                  </div>
+                </div>
+                <table class="orders-table admin-mini-table">
+                  <thead>
+                    <tr>
+                      <th>Rank</th>
+                      <th>Product Name</th>
+                      <th>Category</th>
+                      <th>Units Sold</th>
+                      <th>Revenue</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dash-product-ranking-tbody">
+                    <!-- Rendered dynamically by JS -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- INVENTORY OVERVIEW CARD -->
+              <div class="admin-card">
+                <div class="admin-card-header">
+                  <h4>Inventory Overview</h4>
+                  <button class="btn-text" id="dash-link-inventory">Manage Stock &rarr;</button>
+                </div>
+                <div class="orders-metrics-row mini-metrics">
+                  <div class="metric-card">
+                    <span class="metric-title">Total Products</span>
+                    <span class="metric-val" id="dash-inv-total">17</span>
+                  </div>
+                  <div class="metric-card warning-metric">
+                    <span class="metric-title">Low-Stock Products</span>
+                    <span class="metric-val" id="dash-inv-low">2</span>
+                  </div>
+                  <div class="metric-card danger-metric">
+                    <span class="metric-title">Out-of-Stock</span>
+                    <span class="metric-val" id="dash-inv-out">0</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- RIGHT: CUSTOMER OVERVIEW & RECENT ACTIVITY -->
+            <div class="dash-col">
+              
+              <!-- CUSTOMER OVERVIEW CARD -->
+              <div class="admin-card">
+                <div class="admin-card-header">
+                  <h4>Customer Overview</h4>
+                  <button class="btn-text" id="dash-link-customers">View Customers &rarr;</button>
+                </div>
+                <div class="dash-perf-stats-row">
+                  <div class="perf-stat-pill">
+                    <span class="pill-lbl">Total Customers</span>
+                    <strong class="pill-val" id="dash-cust-total">4</strong>
+                  </div>
+                  <div class="perf-stat-pill">
+                    <span class="pill-lbl">New Customers (This Week)</span>
+                    <strong class="pill-val" id="dash-cust-new">2</strong>
+                  </div>
+                </div>
+                <div class="top-customer-spotlight" id="dash-top-customer-box">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+
+              <!-- RECENT ACTIVITY FEED -->
+              <div class="admin-card">
+                <div class="admin-card-header">
+                  <h4>Recent Activity Log</h4>
+                </div>
+                <div class="activity-feed-list" id="dash-activity-feed">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- MODULE 2: ORDERS MANAGEMENT -->
+        <section id="sect-orders" class="content-section">
+          <div class="staff-orders-control-bar">
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" id="admin-order-search" placeholder="Search order ID, customer name, date...">
+            </div>
+
+            <div class="order-status-tabs" id="admin-order-status-tabs">
+              <button class="status-tab active" data-status="all">All Orders</button>
+              <button class="status-tab" data-status="Pending">Pending</button>
+              <button class="status-tab" data-status="Preparing">Preparing</button>
+              <button class="status-tab" data-status="Ready">Ready</button>
+              <button class="status-tab" data-status="Completed">Completed</button>
+              <button class="status-tab" data-status="Cancelled">Cancelled</button>
+            </div>
+          </div>
+
+          <div class="orders-table-wrapper">
+            <table class="orders-table staff-orders-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Date & Time</th>
+                  <th>Customer</th>
+                  <th>Channel</th>
+                  <th>Purchased Items</th>
+                  <th>Total Price</th>
+                  <th>Payment</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-orders-table-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- MODULE 3: CUSTOMER MANAGEMENT -->
+        <section id="sect-customers" class="content-section">
+          <div class="staff-customers-control-bar">
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" id="admin-customer-search" placeholder="Search customer name, email, phone...">
+            </div>
+
+            <button type="button" class="btn btn-primary" id="admin-btn-add-customer">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span>Add Customer</span>
+            </button>
+          </div>
+
+          <div class="staff-customers-grid" id="admin-customers-grid">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+        <!-- MODULE 4: PRODUCTS MANAGEMENT -->
+        <section id="sect-products" class="content-section">
+          <div class="staff-customers-control-bar">
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" id="admin-product-search" placeholder="Search menu product name or description...">
+            </div>
+
+            <button type="button" class="btn btn-primary" id="admin-btn-open-add-product">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span>Add New Product</span>
+            </button>
+          </div>
+
+          <div class="orders-table-wrapper">
+            <table class="orders-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Stock Count</th>
+                  <th>Options</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-products-table-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- MODULE 5: CATEGORIES MANAGEMENT -->
+        <section id="sect-categories" class="content-section">
+          <div class="staff-customers-control-bar">
+            <h3 class="admin-group-title">Menu Categories</h3>
+            <button type="button" class="btn btn-primary" id="admin-btn-open-add-category">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span>Add Category</span>
+            </button>
+          </div>
+
+          <div class="categories-grid" id="admin-categories-grid">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+        <!-- MODULE 6: INVENTORY MANAGEMENT -->
+        <section id="sect-inventory" class="content-section">
+          <div class="orders-metrics-row">
+            <div class="metric-card">
+              <span class="metric-title">Total SKUs</span>
+              <span class="metric-val" id="inv-total-skus">17</span>
+              <span class="metric-sub">Active Catalog Items</span>
+            </div>
+            <div class="metric-card warning-metric">
+              <span class="metric-title">Low Stock (&lt; 10 units)</span>
+              <span class="metric-val" id="inv-low-skus">2</span>
+              <span class="metric-sub">Requires Reorder</span>
+            </div>
+            <div class="metric-card danger-metric">
+              <span class="metric-title">Out of Stock</span>
+              <span class="metric-val" id="inv-out-skus">0</span>
+              <span class="metric-sub">Unavailable</span>
+            </div>
+          </div>
+
+          <div class="staff-orders-control-bar">
+            <div class="search-input-wrapper">
+              <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" id="admin-inventory-search" placeholder="Search item stock...">
+            </div>
+
+            <div class="order-status-tabs" id="admin-inventory-filter-tabs">
+              <button class="status-tab active" data-filter="all">All Items</button>
+              <button class="status-tab" data-filter="low">Low Stock</button>
+              <button class="status-tab" data-filter="out">Out of Stock</button>
+            </div>
+          </div>
+
+          <div class="orders-table-wrapper mb-28">
+            <table class="orders-table">
+              <thead>
+                <tr>
+                  <th>Product Name</th>
+                  <th>Category</th>
+                  <th>Current Stock</th>
+                  <th>Stock Status</th>
+                  <th>Quick Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-inventory-table-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Stock History Log -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h4>Stock Adjustment History Log</h4>
+            </div>
+            <table class="orders-table admin-mini-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Product Name</th>
+                  <th>Type</th>
+                  <th>Adjustment Qty</th>
+                  <th>Adjusted By</th>
+                </tr>
+              </thead>
+              <tbody id="admin-stock-history-tbody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- MODULE 7: SALES & ANALYTICS -->
+        <section id="sect-sales" class="content-section">
+          <div class="staff-orders-control-bar mb-20">
+            <h3 class="admin-group-title">Sales Analytics Overview</h3>
+            <div class="order-status-tabs" id="admin-sales-period-tabs">
+              <button class="status-tab active" data-period="today">Today</button>
+              <button class="status-tab" data-period="week">This Week</button>
+              <button class="status-tab" data-period="month">This Month</button>
+            </div>
+          </div>
+
+          <div class="orders-metrics-row">
+            <div class="metric-card highlight-metric">
+              <span class="metric-title">Period Sales</span>
+              <span class="metric-val" id="sales-period-total">$0.00</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-title">Number of Orders</span>
+              <span class="metric-val" id="sales-period-orders">0</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-title">Average Ticket Value</span>
+              <span class="metric-val" id="sales-period-aov">$0.00</span>
+            </div>
+            <div class="metric-card">
+              <span class="metric-title">Top Revenue Category</span>
+              <span class="metric-val" id="sales-period-top-cat" style="font-size:1.4rem;">Coffee</span>
+            </div>
+          </div>
+
+          <div class="dash-grid-row">
+            <div class="dash-col">
+              <div class="admin-card">
+                <h4>Sales by Category Breakdown</h4>
+                <div class="chart-bars-container" id="sales-category-bars">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+            </div>
+            <div class="dash-col">
+              <div class="admin-card">
+                <h4>Channel Distribution (POS vs Online)</h4>
+                <div class="chart-bars-container" id="sales-channel-bars">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- MODULE 8: REPORTS -->
+        <section id="sect-reports" class="content-section">
+          <div class="admin-card mb-28">
+            <div class="admin-card-header">
+              <h4>Generate Management Reports</h4>
+            </div>
+            <div class="reports-form-row">
+              <div class="field-group mb-0">
+                <label for="report-type-select">Report Type</label>
+                <select id="report-type-select" class="pos-select">
+                  <option value="sales">Sales & Revenue Report</option>
+                  <option value="order">Order Fulfillment Report</option>
+                  <option value="product">Product Performance Report</option>
+                  <option value="inventory">Inventory Stock Report</option>
+                  <option value="customer">Customer Loyalty Report</option>
+                </select>
+              </div>
+
+              <div class="field-group mb-0">
+                <label for="report-range-select">Time Range</label>
+                <select id="report-range-select" class="pos-select">
+                  <option value="today">Today</option>
+                  <option value="week">Past 7 Days</option>
+                  <option value="month">This Month</option>
+                  <option value="year">Year to Date</option>
+                </select>
+              </div>
+
+              <button type="button" class="btn btn-primary" id="btn-generate-report" style="align-self: flex-end;">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="12" y1="18" x2="12" y2="12"/>
+                  <polyline points="9 15 12 18 15 15"/>
+                </svg>
+                <span>Generate Report</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="admin-card">
+            <div class="admin-card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+              <h4 id="report-preview-title" style="margin: 0;">Sales & Revenue Report Preview</h4>
+              <div style="display: flex; gap: 8px;">
+                <button type="button" class="btn btn-outline btn-sm" id="btn-csv-report">
+                  <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  <span>Download CSV</span>
+                </button>
+                <button type="button" class="btn btn-outline btn-sm" id="btn-print-report">
+                  <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 6 2 18 2 18 9"/>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                    <rect x="6" y="14" width="12" height="8"/>
+                  </svg>
+                  <span>Print Report</span>
+                </button>
+              </div>
+            </div>
+            <div class="orders-table-wrapper" id="report-preview-container">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </section>
+
+        <!-- MODULE 9: PRODUCT PERFORMANCE -->
+        <section id="sect-product-performance" class="content-section">
+          <div class="admin-card mb-28">
+            <div class="admin-card-header">
+              <h4>Best-Selling Product Leaderboard</h4>
+            </div>
+            <table class="orders-table">
+              <thead>
+                <tr>
+                  <th>Rank</th>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Total Units Sold</th>
+                  <th>Gross Revenue</th>
+                  <th>Performance Trend</th>
+                </tr>
+              </thead>
+              <tbody id="admin-perf-leaderboard-tbody">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- MODULE 10: STAFF & USERS -->
+        <section id="sect-staff-users" class="content-section">
+          <div class="staff-customers-control-bar">
+            <h3 class="admin-group-title">Staff Accounts & User Roles</h3>
+            <button type="button" class="btn btn-primary" id="admin-btn-add-staff">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+              <span>Add Staff Account</span>
+            </button>
+          </div>
+
+          <div class="orders-table-wrapper">
+            <table class="orders-table">
+              <thead>
+                <tr>
+                  <th>Staff Member</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Assigned Station</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="admin-staff-table-body">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- MODULE 11: NOTIFICATIONS -->
+        <section id="sect-notifications" class="content-section">
+          <div class="staff-customers-control-bar">
+            <h3 class="admin-group-title">System Alerts & Notifications</h3>
+            <button type="button" class="btn btn-outline" id="btn-mark-all-read">Mark All as Read</button>
+          </div>
+
+          <div class="notifications-list" id="admin-notif-list">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+        <!-- MODULE 12: SETTINGS -->
+        <section id="sect-settings" class="content-section">
+          <form id="admin-settings-form">
+            <div class="admin-card mb-24">
+              <h4>Coffee Shop Information</h4>
+              <div class="profile-form-grid mt-16">
+                <div class="field-group">
+                  <label for="set-shop-name">Shop Name</label>
+                  <input type="text" id="set-shop-name" value="The Daily Grind Coffee Shop" required>
+                </div>
+                <div class="field-group">
+                  <label for="set-phone">Contact Phone</label>
+                  <input type="text" id="set-phone" value="+1 (555) 019-8822" required>
+                </div>
+                <div class="field-group full-width-field">
+                  <label for="set-address">Store Address</label>
+                  <input type="text" id="set-address" value="123 Espresso Lane, Caramel Heights, NY 10001" required>
+                </div>
+              </div>
+            </div>
+
+            <div class="admin-card mb-24">
+              <h4>Financial & Order Configurations</h4>
+              <div class="profile-form-grid mt-16">
+                <div class="field-group">
+                  <label for="set-currency">Currency Symbol</label>
+                  <select id="set-currency" class="pos-select">
+                    <option value="$" selected>$ USD ($)</option>
+                    <option value="€">€ EUR (€)</option>
+                    <option value="£">£ GBP (£)</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label for="set-tax-rate">Sales Tax Rate (%)</label>
+                  <input type="number" id="set-tax-rate" value="8" step="0.1" min="0" required>
+                </div>
+                <div class="field-group">
+                  <label for="set-low-stock-threshold">Low-Stock Threshold (Units)</label>
+                  <input type="number" id="set-low-stock-threshold" value="10" min="1" required>
+                </div>
+                <div class="field-group">
+                  <label for="set-default-status">Default Order Status</label>
+                  <select id="set-default-status" class="pos-select">
+                    <option value="Preparing" selected>Preparing</option>
+                    <option value="Pending">Pending</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="btn-save-settings">Save Configurations</button>
+          </form>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- MODALS FOR ADMIN CRUD ACTIONS -->
+
+  <!-- MODAL 1: ADD/EDIT PRODUCT MODAL -->
+  <div id="admin-product-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content modal-md">
+      <button class="close-modal-btn" id="btn-close-prod-modal">&times;</button>
+      <div class="modal-header-simple">
+        <h3 id="admin-prod-modal-title">Add New Product</h3>
+        <p>Enter menu product details, pricing, category, and options.</p>
+      </div>
+      <form id="admin-product-form" class="modal-body-padded" novalidate>
+        <input type="hidden" id="edit-prod-id">
+        
+        <div class="field-group">
+          <label for="prod-name">Product Name</label>
+          <input type="text" id="prod-name" placeholder="e.g. Honey Lavender Latte" required>
+        </div>
+
+        <div class="profile-form-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 0;">
+          <div class="field-group">
+            <label for="prod-category">Category</label>
+            <select id="prod-category" class="pos-select" style="width: 100%;" required>
+              <option value="Coffee">Coffee</option>
+              <option value="Non-Coffee">Non-Coffee</option>
+              <option value="Tea">Tea</option>
+              <option value="Pastries">Pastries</option>
+              <option value="Snacks">Snacks</option>
+              <option value="Desserts">Desserts</option>
+              <option value="Add-ons">Add-ons</option>
+            </select>
+          </div>
+
+          <div class="field-group">
+            <label for="prod-price">Price ($)</label>
+            <input type="number" id="prod-price" placeholder="4.50" step="0.01" min="0" required>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="prod-stock-count">Initial Stock Inventory Count</label>
+          <input type="number" id="prod-stock-count" value="25" min="0" required>
+        </div>
+
+        <div class="field-group">
+          <label for="prod-desc">Description</label>
+          <textarea id="prod-desc" rows="2" placeholder="Brief description of notes and ingredients..." required></textarea>
+        </div>
+
+        <!-- PRODUCT IMAGE INSERTION -->
+        <div class="field-group">
+          <label>Product Image</label>
+          <input type="hidden" id="prod-image-data">
+          
+          <div class="prod-img-upload-box">
+            <div id="prod-img-preview-wrap" class="prod-img-preview-container" style="display:none;">
+              <img id="prod-img-preview" src="" alt="Product Preview">
+              <button type="button" id="btn-remove-prod-img" class="btn-remove-img" title="Remove image">&times;</button>
+            </div>
+            
+            <div class="prod-img-inputs-row" id="prod-img-inputs-row">
+              <div class="file-upload-wrapper">
+                <input type="file" id="prod-image-file" accept="image/*" class="file-input-hidden">
+                <label for="prod-image-file" class="btn btn-outline btn-sm file-upload-btn">
+                  <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px; height:16px;">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                  <span>Upload Image File</span>
+                </label>
+              </div>
+              <span class="upload-or-divider">or</span>
+              <input type="url" id="prod-image-url" placeholder="Paste image URL (https://...)" class="img-url-input">
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-form-grid" style="grid-template-columns: 1fr 1fr;">
+          <label class="pay-option" style="flex-direction: row; gap: 8px; justify-content: flex-start; padding: 10px;">
+            <input type="checkbox" id="prod-has-milk" checked style="display:inline-block;">
+            <span>Allows Milk Customization</span>
+          </label>
+          <label class="pay-option" style="flex-direction: row; gap: 8px; justify-content: flex-start; padding: 10px;">
+            <input type="checkbox" id="prod-has-sweetness" checked style="display:inline-block;">
+            <span>Allows Sweetness Level</span>
+          </label>
+        </div>
+
+        <div class="modal-footer-flex">
+          <button type="button" class="btn btn-outline" id="btn-cancel-prod-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-prod">Save Product</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: ADD CATEGORY MODAL -->
+  <div id="admin-category-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content modal-md">
+      <button class="close-modal-btn" id="btn-close-cat-modal">&times;</button>
+      <div class="modal-header-simple">
+        <h3>Add Menu Category</h3>
+        <p>Create a new category for products in your catalog.</p>
+      </div>
+      <form id="admin-category-form" class="modal-body-padded" novalidate>
+        <div class="field-group">
+          <label for="cat-name">Category Name</label>
+          <input type="text" id="cat-name" placeholder="e.g. Cold Brew, Desserts, Tea" required>
+        </div>
+        <div class="modal-footer-flex">
+          <button type="button" class="btn btn-outline" id="btn-cancel-cat-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Category</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: ADJUST STOCK MODAL -->
+  <div id="admin-stock-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content modal-md">
+      <button class="close-modal-btn" id="btn-close-stock-modal">&times;</button>
+      <div class="modal-header-simple">
+        <h3 id="stock-modal-title">Adjust Inventory Stock</h3>
+        <p id="stock-modal-subtitle">Update stock count for selected product.</p>
+      </div>
+      <form id="admin-stock-form" class="modal-body-padded" novalidate>
+        <input type="hidden" id="stock-prod-id">
+        <div class="field-group">
+          <label for="stock-adjust-qty">Stock Adjustment (+/- Quantity)</label>
+          <input type="number" id="stock-adjust-qty" placeholder="e.g. +10 or -5" required>
+        </div>
+        <div class="field-group">
+          <label for="stock-adjust-reason">Reason for Adjustment</label>
+          <input type="text" id="stock-adjust-reason" placeholder="e.g. Fresh roaster shipment received" required>
+        </div>
+        <div class="modal-footer-flex">
+          <button type="button" class="btn btn-outline" id="btn-cancel-stock-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Apply Stock Change</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 4: ADD STAFF ACCOUNT MODAL -->
+  <div id="admin-staff-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content modal-md">
+      <button class="close-modal-btn" id="btn-close-staff-acc-modal">&times;</button>
+      <div class="modal-header-simple">
+        <h3>Create Staff Account</h3>
+        <p>Register a new employee for POS or management operations.</p>
+      </div>
+      <form id="admin-staff-form" class="modal-body-padded" novalidate>
+        <div class="field-group">
+          <label for="staff-acc-name">Full Name</label>
+          <input type="text" id="staff-acc-name" placeholder="e.g. David Miller" required>
+        </div>
+        <div class="field-group">
+          <label for="staff-acc-email">Work Email</label>
+          <input type="email" id="staff-acc-email" placeholder="david.m@dailygrind.com" required>
+        </div>
+        <div class="field-group">
+          <label for="staff-acc-role">Assigned Role</label>
+          <select id="staff-acc-role" class="pos-select" style="width:100%;">
+            <option value="Barista">Barista</option>
+            <option value="Head Cashier">Head Cashier</option>
+            <option value="Shift Manager">Shift Manager</option>
+            <option value="Administrator">Administrator</option>
+          </select>
+        </div>
+        <div class="modal-footer-flex">
+          <button type="button" class="btn btn-outline" id="btn-cancel-staff-acc">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Account</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 5: ADD NEW CUSTOMER -->
+  <div id="add-customer-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content modal-md">
+      <button class="close-modal-btn" id="btn-close-add-cust-modal">&times;</button>
+      <div class="modal-header-simple">
+        <h3>Register New Customer</h3>
+        <p>Add member details to customer directory and loyalty system.</p>
+      </div>
+      <form id="add-customer-form" class="modal-body-padded" novalidate>
+        <div class="field-group">
+          <label for="new-cust-name">Full Name</label>
+          <input type="text" id="new-cust-name" placeholder="e.g. Alex Rivera" required>
+        </div>
+        <div class="field-group">
+          <label for="new-cust-email">Email Address</label>
+          <input type="email" id="new-cust-email" placeholder="alex.rivera@example.com" required>
+        </div>
+        <div class="field-group">
+          <label for="new-cust-phone">Phone Number</label>
+          <input type="tel" id="new-cust-phone" placeholder="+1 (555) 019-2834" required>
+        </div>
+        <div class="field-group">
+          <label for="new-cust-tier">Membership Tier</label>
+          <select id="new-cust-tier" class="pos-select">
+            <option value="Standard Member">Standard Member (0% Discount)</option>
+            <option value="Silver Member">Silver Member (5% Discount)</option>
+            <option value="Gold Member" selected>Gold Member (10% Discount)</option>
+            <option value="Platinum Member">Platinum Member (15% Discount)</option>
+          </select>
+        </div>
+        <div class="modal-footer-flex">
+          <button type="button" class="btn btn-outline" id="btn-cancel-add-cust">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-save-new-cust">Save Customer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 6: ADMIN ORDER DETAILS MODAL -->
+  <div id="admin-order-details-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content modal-lg">
+      <button class="close-modal-btn" id="btn-close-admin-order-modal">&times;</button>
+      <div class="modal-header-simple" style="display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h3 id="admin-detail-modal-order-id" style="margin: 0;">Order Details</h3>
+          <p style="margin: 4px 0 0;">Inspect itemized ticket, customer details, and payment information.</p>
+        </div>
+        <span class="status-badge" id="admin-detail-modal-status-badge">Preparing</span>
+      </div>
+      <div class="modal-body-padded" id="admin-order-details-body">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 7: ADMIN CUSTOMER ORDER HISTORY MODAL -->
+  <div id="admin-customer-history-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content modal-lg">
+      <button class="close-modal-btn" id="btn-close-admin-cust-history-modal">&times;</button>
+      <div class="modal-header-simple">
+        <h3 id="admin-cust-history-modal-name">Customer Order History</h3>
+        <p id="admin-cust-history-modal-sub">View all lifetime transactions for this customer account.</p>
+      </div>
+      <div class="modal-body-padded" id="admin-cust-history-modal-body">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="api_client.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
