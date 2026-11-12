@@ -884,7 +884,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderOrdersUI();
   renderPastOrdersTable();
 
-  // Poll data every 8s so dashboard products, images, categories, and orders update in real time
+  // Poll data every 4s so dashboard products, images, categories, and orders update in real time
   setInterval(async () => {
     await loadAllCustomerData();
     renderCategoryFilterCapsules();
@@ -897,7 +897,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         renderPastOrdersTable();
       }
     }
-  }, 8000);
+  }, 4000);
 });
 
 

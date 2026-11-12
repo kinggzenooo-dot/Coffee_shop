@@ -29,11 +29,16 @@ A comprehensive web-based Coffee Shop Management System featuring customer order
    python server.py
    ```
 
-3. Open your browser and navigate to:
-   - Customer Portal: `http://localhost:5000/index.html`
-   - Barista Portal: `http://localhost:5000/barista.html`
-   - Staff POS: `http://localhost:5000/staff.html`
-   - Admin Portal: `http://localhost:5000/admin.html`
+3. Open your browser to the **Single Unified Entry URL**:
+   - **`http://localhost:5000/`** (or `index.html`)
+
+### Demo Accounts (Password: `password123` for all)
+- **☕ Customer**: `john.doe@example.com` &rarr; Routes to Customer Store
+- **🧑‍🍳 Barista**: `barista@dailygrind.com` &rarr; Routes to Barista KDS
+- **💳 Staff / Cashier**: `sarah.j@dailygrind.com` &rarr; Routes to POS Terminal
+- **👑 Administrator**: `admin@dailygrind.com` &rarr; Routes to Admin Dashboard
+
+*Note: You can also click the 1-click quick login chips on the sign-in page, or use the bottom navigation hub to jump straight into any portal.*
 
 ## Deploy to Render
 

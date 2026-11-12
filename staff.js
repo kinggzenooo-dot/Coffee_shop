@@ -1265,7 +1265,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderStaffCustomersUI();
   renderStaffCatalogUI();
 
-  // Polling every 10s for live incoming online customer orders, product/category changes
+  // Polling every 4s for live incoming online customer orders, product/category changes
   setInterval(async () => {
     await loadAllData();
     renderCategoryCapsules();

@@ -1751,7 +1751,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Initial load
   await loadAllData();
 
-  // Background polling every 20 seconds to sync orders & alerts cleanly without disruptive redraws
+  // Background polling every 4 seconds to sync orders & alerts cleanly without disruptive redraws
   setInterval(async () => {
     try {
       const [ordsData, notifsData, prodsData] = await Promise.all([
@@ -1765,6 +1765,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       updateNotifBadge();
       renderActiveView();
     } catch (e) {}
-  }, 20000);
+  }, 4000);
 
 });

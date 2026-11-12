@@ -202,6 +202,24 @@ document.addEventListener('DOMContentLoaded', () => {
     return true;
   };
 
+  // Quick Demo Chips
+  const demoChips = document.querySelectorAll('.demo-chip');
+  demoChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const email = chip.getAttribute('data-email');
+      const emailInput = document.getElementById('signin-email');
+      const passInput = document.getElementById('signin-password');
+      if (emailInput && passInput) {
+        emailInput.value = email;
+        passInput.value = 'password123';
+        showToast(`Logging in as ${chip.textContent.trim()}...`, 'success');
+        setTimeout(() => {
+          signinForm.requestSubmit();
+        }, 300);
+      }
+    });
+  });
+
   // Sign In submit
   signinForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -246,8 +264,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const name = document.getElementById('signup-name').value.trim();
       const email = document.getElementById('signup-email').value.trim();
       const password = document.getElementById('signup-password').value;
+      const role = document.getElementById('signup-role')?.value || 'customer';
       
-      const res = await window.API.signup(name, email, password);
+      const res = await window.API.signup(name, email, password, role);
       if (res && res.status === 'success') {
         const user = res.user;
         localStorage.setItem('dailygrind_current_user', JSON.stringify(user));
@@ -261,11 +280,13 @@ document.addEventListener('DOMContentLoaded', () => {
           rules[key]?.classList.remove('valid', 'invalid-active');
         }
 
-        // Transition to appropriate portal or login
+        // Transition to appropriate portal
         setTimeout(() => {
           if (user.role === 'admin') {
             window.location.href = 'admin.html';
-          } else if (user.role === 'staff') {
+          } else if (user.role === 'barista') {
+            window.location.href = 'barista.html';
+          } else if (user.role === 'staff' || user.role === 'cashier') {
             window.location.href = 'staff.html';
           } else {
             window.location.href = 'dashboard.html';

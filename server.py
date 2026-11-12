@@ -171,11 +171,30 @@ def init_db():
         )
     ''')
 
-    # Ensure default Barista accounts are seeded
-    cursor.execute("INSERT OR IGNORE INTO users (id, name, email, password, role, phone, address, tier, points, total_spend, total_orders) VALUES ('barista1', 'Marcus Vance (Barista)', 'barista@dailygrind.com', 'password123', 'barista', '+1 (555) 019-8803', 'Espresso Bar Station', 'Staff Member', 0, 0, 0)")
-    cursor.execute("INSERT OR IGNORE INTO users (id, name, email, password, role, phone, address, tier, points, total_spend, total_orders) VALUES ('barista2', 'Marcus Vance', 'marcus.v@dailygrind.com', 'password123', 'barista', '+1 (555) 019-8803', 'Espresso Bar Station', 'Staff Member', 0, 0, 0)")
-    cursor.execute("INSERT OR IGNORE INTO staff_accounts (id, name, email, role, station, status) VALUES ('st3', 'Marcus Vance', 'marcus.v@dailygrind.com', 'Barista', 'Espresso Bar', 'Active')")
-    cursor.execute("INSERT OR IGNORE INTO staff_accounts (id, name, email, role, station, status) VALUES ('st4', 'Marcus Vance', 'barista@dailygrind.com', 'Barista', 'Espresso Bar', 'Active')")
+    # Ensure default system accounts are seeded
+    default_users = [
+        ('admin1', 'Admin Director', 'admin@dailygrind.com', 'password123', 'admin', '+1 (555) 019-8800', 'Executive Office', 'Platinum Member', 1000, 500.00, 20),
+        ('staff1', 'Sarah Jenkins (Cashier)', 'sarah.j@dailygrind.com', 'password123', 'staff', '+1 (555) 019-8801', 'Terminal #01', 'Gold Member', 500, 250.00, 10),
+        ('barista1', 'Marcus Vance (Barista)', 'barista@dailygrind.com', 'password123', 'barista', '+1 (555) 019-8803', 'Espresso Bar Station', 'Staff Member', 0, 0, 0),
+        ('barista2', 'Marcus Vance', 'marcus.v@dailygrind.com', 'password123', 'barista', '+1 (555) 019-8803', 'Espresso Bar Station', 'Staff Member', 0, 0, 0),
+        ('c1', 'John Doe', 'john.doe@example.com', 'password123', 'customer', '+1 (555) 234-5678', '123 Espresso Lane, NY 10001', 'Gold Member', 420, 142.50, 8),
+        ('c2', 'Jane Smith', 'jane.smith@example.com', 'password123', 'customer', '+1 (555) 891-2345', '456 Mocha Ave, NY 10002', 'Silver Member', 180, 68.00, 4)
+    ]
+    cursor.executemany('''
+        INSERT OR IGNORE INTO users (id, name, email, password, role, phone, address, tier, points, total_spend, total_orders)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ''', default_users)
+
+    default_staff = [
+        ('st1', 'Admin Director', 'admin@dailygrind.com', 'Administrator', 'Main Office', 'Active'),
+        ('st2', 'Sarah Jenkins', 'sarah.j@dailygrind.com', 'Head Cashier', 'Terminal #01', 'Active'),
+        ('st3', 'Marcus Vance', 'marcus.v@dailygrind.com', 'Barista', 'Espresso Bar', 'Active'),
+        ('st4', 'Marcus Vance', 'barista@dailygrind.com', 'Barista', 'Espresso Bar', 'Active')
+    ]
+    cursor.executemany('''
+        INSERT OR IGNORE INTO staff_accounts (id, name, email, role, station, status)
+        VALUES (?, ?, ?, ?, ?, ?)
+    ''', default_staff)
 
     conn.commit()
 
@@ -345,6 +364,7 @@ def api_signup():
     name = data.get('name', '').strip()
     email = data.get('email', '').strip().lower()
     password = data.get('password', '')
+    req_role = (data.get('role') or '').strip().lower()
 
     if not name or not email or not password:
         return jsonify({'status': 'error', 'message': 'All fields are required.'}), 400
@@ -355,17 +375,35 @@ def api_signup():
         conn.close()
         return jsonify({'status': 'error', 'message': 'An account with this email already exists.'}), 400
 
-    new_id = f"c_{uuid.uuid4().hex[:8]}"
-    role = 'customer'
-    if 'admin' in email:
+    new_id = f"u_{uuid.uuid4().hex[:8]}"
+    if req_role in ['customer', 'barista', 'staff', 'admin']:
+        role = req_role
+    elif 'admin' in email:
         role = 'admin'
+    elif 'barista' in email:
+        role = 'barista'
     elif 'staff' in email or 'cashier' in email:
         role = 'staff'
+    else:
+        role = 'customer'
+
+    initial_points = 500 if role in ['admin', 'staff', 'barista'] else 50
+    initial_tier = 'Staff Member' if role in ['staff', 'barista'] else ('Platinum Member' if role == 'admin' else 'Standard Member')
 
     conn.execute('''
         INSERT INTO users (id, name, email, password, role, tier, points, total_spend, total_orders)
-        VALUES (?, ?, ?, ?, ?, 'Standard Member', 50, 0.0, 0)
-    ''', (new_id, name, email, password, role))
+        VALUES (?, ?, ?, ?, ?, ?, ?, 0.0, 0)
+    ''', (new_id, name, email, password, role, initial_tier, initial_points))
+
+    # Sync to staff accounts table if employee/admin role
+    if role in ['barista', 'staff', 'admin']:
+        station = 'Espresso Bar' if role == 'barista' else ('Main Office' if role == 'admin' else 'Terminal #01')
+        title = 'Barista' if role == 'barista' else ('Administrator' if role == 'admin' else 'Cashier / POS Staff')
+        conn.execute('''
+            INSERT OR IGNORE INTO staff_accounts (id, name, email, role, station, status)
+            VALUES (?, ?, ?, ?, ?, 'Active')
+        ''', (f"st_{uuid.uuid4().hex[:6]}", name, email, title, station))
+
     conn.commit()
     user = conn.execute("SELECT * FROM users WHERE id = ?", (new_id,)).fetchone()
     conn.close()

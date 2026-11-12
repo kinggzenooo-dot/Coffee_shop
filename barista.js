@@ -468,9 +468,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadKDSData();
   renderKDSTickets();
 
-  // Background polling every 5s for live instant ticket fulfillment
+  // Background polling every 4s for live instant ticket fulfillment
   setInterval(async () => {
     await loadKDSData();
     renderKDSTickets();
-  }, 5000);
+  }, 4000);
 });
